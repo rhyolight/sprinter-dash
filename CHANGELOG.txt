@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.2
+
+* Fixed bug in data route handlers.
+* Exposing all data route handlers in attach().
+
 ## 0.1.1
 
 * Updating sprinter dependency.

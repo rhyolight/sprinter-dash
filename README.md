@@ -37,3 +37,12 @@ You can create an instance of `SprinterDash` and attach it to an existing Expres
     app.listen(8080);
 
 SprinterDash will be running on `http://localhost:8080/dashboard`.
+
+When using the `attach()` function, SprinterDash will set up the following data routes that you can call from your application's front-end:
+
+- `/<url-prefix>/_issues`: returns all issues updated within 2 months
+- `/<url-prefix>/_recentIssues`: returns all issues updated within 2 days
+- `/<url-prefix>/_oldIssues`: returns all issues over 6 months old
+- `/<url-prefix>/_staleIssues`: returns all issues updated over 2 months ago
+
+The `<url-prefix>` defaults to `dash`, but can be specified by passing a the `urlPrefix` parameter to `attach()`.
