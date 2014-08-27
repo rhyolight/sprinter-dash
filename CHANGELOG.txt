@@ -3,3 +3,4 @@
 ## 0.1.0
 
 * Initial release with one simple issues listing.
+* Added "Affliction" to show stale and old issues.

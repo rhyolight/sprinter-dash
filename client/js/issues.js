@@ -358,14 +358,14 @@ $(function() {
         var filter = extractFilterFrom(window.location.hash)
           , affliction = filter.affliction
           , issuesUrl = urlPrefix + '_issues';
-        // // Old issues were created_at a long time ago.
-        // if (affliction == 'old') {
-        //     issuesUrl = '/_monitorRequest/latest_issues/oldIssues';
-        // }
-        // // Stale issues were updated_at a long time ago.
-        // else if (affliction == 'stale') {
-        //     issuesUrl = '/_monitorRequest/latest_issues/staleIssues';
-        // }
+        // Old issues were created_at a long time ago.
+        if (affliction == 'old') {
+            issuesUrl = urlPrefix + '_oldIssues';
+        }
+        // Stale issues were updated_at a long time ago.
+        else if (affliction == 'stale') {
+            issuesUrl = urlPrefix + '_staleIssues';
+        }
         $issues.html('<h2>' + loadingMessage + '</h2>');
         $.getJSON(issuesUrl, function(response) {
             // Keep this as the master copy to start fresh when filters are applied.
