@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1
+
+* Updating sprinter dependency.
+
 ## 0.1.0
 
 * Initial release with one simple issues listing.
