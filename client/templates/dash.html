@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Issues - NuPIC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{staticDir}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/style.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/nupic.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/issues.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="header">
+    <div class="row">
+        <div class="col-md-6">
+            <h1>{{title}}</h1>
+        </div>
+    </div>
+</div>
+
+<div id="powered-by">
+    Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a> & <a
+        href="https://github.com/rhyolight/travis-foreman" target="_blank">travis-foreman</a>.
+</div>
+
+<ul>
+    <li><a href="issues">issues</a></li>
+</ul>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.1.2.js"></script>
+<script src="{{staticDir}}js/lib/async.js"></script>
+<script src="{{staticDir}}js/lib/moment.min.js"></script>
+<script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
+<script>
+    window.SPRINTERDASH = {
+        staticDir: "{{staticDir}}"
+      , urlPrefix: "{{urlPrefix}}"
+    };
+</script>
+<script src="{{staticDir}}js/issues.js"></script>
+
+</body>
+</html>

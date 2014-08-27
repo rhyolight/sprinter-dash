@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Issues - NuPIC</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{staticDir}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/style.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/nupic.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/issues.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-6">
+                <h1>{{title}}</h1>
+            </div>
+            <div class="col-md-6">
+
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="collapse navbar-collapse container-fluid" id="issue-filters">
+                        <ul class="nav navbar-nav">
+                            <li id="state-filter" class="dropdown name-count"></li>
+                            <li id="type-filter" class="dropdown name-count"></li>
+                            <li id="milestone-filter" class="dropdown name-count"></li>
+                            <li id="repo-filter" class="dropdown name-count"></li>
+                            <li id="assignee-filter" class="dropdown name-count"></li>
+                            <li id="label-filter" class="dropdown name-count"></li>
+
+                            <li class="dropdown affliction">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="">None</a></li>
+                                    <li><a href="#affliction=old">Old Issues</a></li>
+                                    <li><a href="#affliction=stale">Stale Issues</a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div id="powered-by">
+    Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a> & <a
+        href="https://github.com/rhyolight/travis-foreman" target="_blank">travis-foreman</a>.
+</div>
+
+<div id="issues-container"></div>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.5.2/underscore-min.js"></script>
+<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.1.2.js"></script>
+<script src="{{staticDir}}js/lib/async.js"></script>
+<script src="{{staticDir}}js/lib/moment.min.js"></script>
+<script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
+<script>
+    window.SPRINTERDASH = {
+        staticDir: "{{staticDir}}"
+      , urlPrefix: "{{urlPrefix}}"
+    };
+</script>
+<script src="{{staticDir}}js/issues.js"></script>
+
+</body>
+</html>

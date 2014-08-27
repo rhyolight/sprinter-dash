@@ -1,0 +1,29 @@
+{
+  "name": "sprinter-dash",
+  "version": "0.1.0",
+  "description": "GitHub Issues Dashboard for multiple repositories.",
+  "author": "Matthew Taylor <matt@numenta.org>",
+  "main": "lib/dash.js",
+  "license": {
+    "type": "MIT"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rhyolight/sprinter-dash.git"
+  },
+  "dependencies": {
+    "async": "^0.9.0",
+    "express": "3.4.7",
+    "handlebars": "^2.0.0-alpha.4",
+    "moment": "^2.8.2",
+    "sprinter": "0.1.13",
+    "travis-foreman": "0.0.3",
+    "underscore": "1.5.2"
+  },
+  "engines": {
+    "node": "0.10.x"
+  }
+}
