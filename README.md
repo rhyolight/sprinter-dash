@@ -1,8 +1,22 @@
 # Sprinter Dash
 
+[![NPM version](https://badge.fury.io/js/sprinter-dash.svg)](http://badge.fury.io/js/sprinter-dash)
+
 > Powered by [sprinter](https://github.com/rhyolight/sprinter.js)
 
-This is a web UI for Sprinter. It is under construction.
+<table>
+<tr>
+  <td>
+    <img src="client/images/haters_gonna_hate_fast.gif"/>
+  </td>
+  <td>
+    <p/>This is a web UI for <a href="https://github.com/rhyolight/sprinter.js">sprinter</a>. It is under construction.
+  </td>
+</tr>
+</table>
+
+
+![Example image](client/images/dash-example.png)
 
 ## Authentication with GitHub
 
@@ -45,4 +59,4 @@ When using the `attach()` function, SprinterDash will set up the following data 
 - `/<url-prefix>/_oldIssues`: returns all issues over 6 months old
 - `/<url-prefix>/_staleIssues`: returns all issues updated over 2 months ago
 
-The `<url-prefix>` defaults to `dash`, but can be specified by passing a the `urlPrefix` parameter to `attach()`.
+The `<url-prefix>` defaults to `dash`, but can be specified by passing a the `urlPrefix` parameter to `attach()` as shown in the example above.
