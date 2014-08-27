@@ -20,5 +20,5 @@ if (args.length) {
     console.warn(repos);
 }
 
-dash = new SprinterDash(repos);
+dash = new SprinterDash({repos: repos});
 dash.startServer(port);

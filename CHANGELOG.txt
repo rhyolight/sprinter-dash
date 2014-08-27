@@ -4,3 +4,4 @@
 
 * Initial release with one simple issues listing.
 * Added "Affliction" to show stale and old issues.
+* GitHub credentials can be passed to the constructor.

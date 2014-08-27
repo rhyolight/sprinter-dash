@@ -6,9 +6,11 @@ This is a web UI for Sprinter. It is under construction.
 
 ## Authentication with GitHub
 
-You must provide GitHub credentials to run SprinterDash. At this time, they must be provided as environment variables: `GH_USERNAME`, `GH_PASSWORD`.
+You must provide GitHub credentials to run SprinterDash. They can be provided as environment variables: `GH_USERNAME`, `GH_PASSWORD`. In this case, they are picked up automatically and used. Or you can specify them in the `SprinterDash` constructor.
 
 ## Start the sample server
+
+For this example to work, set the following environment variables: `GH_USERNAME`, `GH_PASSWORD`.
 
     node index.js
 
@@ -25,7 +27,11 @@ You can specify what repositories to gather issues from with a comma-delimited l
 You can create an instance of `SprinterDash` and attach it to an existing Express application.
 
     var SprinterDash = require('sprinter-dash');
-    var dash = new SprinterDash(['org1/repo1', 'org1/repo2']);
+    var dash = new SprinterDash({
+        repos: ['org1/repo1', 'org1/repo2']
+      , ghUsername: <GITHUB USERNAME>
+      , ghPassword: <GITHUB PASSWORD OR AUTH TOKEN>
+    });
     var app = express();
     dash.attach(app, 'dashboard');
     app.listen(8080);
