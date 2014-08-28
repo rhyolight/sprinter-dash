@@ -77,3 +77,5 @@ If you pass a `travisOrg` into SprinterDash, Travis-CI builds will be shown when
       , ghUsername: <GITHUB USERNAME>
       , ghPassword: <GITHUB PASSWORD OR AUTH TOKEN>
     });
+
+![Example Travis image](client/images/travis-example.png)
