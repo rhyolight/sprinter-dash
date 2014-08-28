@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.7
+
+* Updated to sprinter 0.1.15.
+
 ## 0.1.6
 
 * Updated to sprinter 0.1.14.
