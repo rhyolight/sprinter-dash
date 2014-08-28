@@ -60,3 +60,14 @@ When using the `attach()` function, SprinterDash will set up the following data 
 - `/<url-prefix>/_staleIssues`: returns all issues updated over 2 months ago
 
 The `<url-prefix>` defaults to `dash`, but can be specified by passing a the `urlPrefix` parameter to `attach()` as shown in the example above.
+
+## Show Travis-CI build status
+
+If you pass a `travisOrg` into SprinterDash, Travis-CI builds will be shown when running in the issue table. 
+
+    var dash = new SprinterDash({
+        repos: ['org1/repo1', 'org1/repo2']
+      , travisOrg: 'rhyolight' // GitHub org or username
+      , ghUsername: <GITHUB USERNAME>
+      , ghPassword: <GITHUB PASSWORD OR AUTH TOKEN>
+    });
