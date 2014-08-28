@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.6
+
+* Updated to sprinter 0.1.14.
+
 ## 0.1.5
 
 * Removed a missed log statement.

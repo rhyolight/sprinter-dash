@@ -8,35 +8,51 @@
     <img src="client/images/haters_gonna_hate_fast.gif"/>
   </td>
   <td>
-    <p/>This is a web UI for <a href="https://github.com/rhyolight/sprinter.js">sprinter</a>. It is under construction.
+    <p/>This is a web dashboard for <a href="https://github.com/rhyolight/sprinter.js">sprinter</a> with client-side filters.
   </td>
 </tr>
 </table>
 
+Sprinter Dash is a web frontend for viewing issues from multiple GitHub issue trackers on one view. It provides views for:
+
+- recent issues (past 2 days)
+- current issues \[default\] (past 2 months, open and closed)
+- old issues (created over 6 months ago)
+- stale issues (updated over 2 months ago)
+
+Once issues are loaded on the client, they can be filtered locally by:
+
+- repository
+- assignee
+- type (PR or issue)
+- state (closed / open)
+- label
+- milestone ("Sprints")
 
 ![Example image](client/images/dash-example.png)
 
 ## Authentication with GitHub
 
-You must provide GitHub credentials to run SprinterDash. They can be provided as environment variables: `GH_USERNAME`, `GH_PASSWORD`. In this case, they are picked up automatically and used. Or you can specify them in the `SprinterDash` constructor.
+You must provide GitHub credentials to run SprinterDash. They can be provided as environment variables: `GH_USERNAME`, `GH_PASSWORD`. In this case, they are picked up automatically and used. Or you can specify them in the `SprinterDash` constructor if attaching to an existing Express application (see [below](#incorporate-into-your-own-express-server)).
 
 ## Quick Start
 
 For this example to work, simply clone this repo and set the following environment variables: `GH_USERNAME`, `GH_PASSWORD`. Then run:
 
+    npm install .
     node index.js
 
 This will start a server monitoring a couple of default repositories.
 
 ### Use your own repos
 
-You can specify what repositories to gather issues from with a comma-delimited list of repository slugs.
+You can specify what repositories to gather issues from with a comma-delimited list of repository slugs. Specified repositories must have GitHub Issues enabled.
 
     node index.js org1/repo1,org1/repo2,org2/repo3
 
 ## Incorporate into your own Express server
 
-You can create an instance of `SprinterDash` and attach it to an existing Express application.
+You can create an instance of `SprinterDash` and attach it to an existing Express application. This is how it is used at <http://status.numenta.org/issues>.
 
     var SprinterDash = require('sprinter-dash');
     var dash = new SprinterDash({
@@ -63,7 +79,7 @@ These URLs will return JSON issue data.
 
 ### Available Template Routes
 
-`/<url-prefix>/templates/issues.html` is the location of the Handlebars template used to render issues client-side. You can re-use this to provide the SprinterDash view in any page of your website. 
+`/<url-prefix>/client/templates/issues.html` is the location of the Handlebars template used to render issues client-side. You can re-use this to provide the SprinterDash view in any page of your website (as shown in <http://status.numenta.org/>). 
 
 The `<url-prefix>` defaults to `dash`, but can be specified by passing a the `urlPrefix` parameter to `attach()` as shown in the example above.
 

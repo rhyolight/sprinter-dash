@@ -19,7 +19,7 @@
     "express": "3.4.7",
     "handlebars": "^2.0.0-alpha.4",
     "moment": "^2.8.2",
-    "sprinter": "^0.1.13",
+    "sprinter": "^0.1.14",
     "travis-foreman": "0.0.3",
     "underscore": "1.5.2"
   },
