@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.5
+
+* Removed a missed log statement.
+
 ## 0.1.4
 
 * Exposing travisOrg constructor param for showing Travis-CI builds.

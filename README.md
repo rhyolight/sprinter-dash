@@ -2,8 +2,6 @@
 
 [![NPM version](https://badge.fury.io/js/sprinter-dash.svg)](http://badge.fury.io/js/sprinter-dash)
 
-> Powered by [sprinter](https://github.com/rhyolight/sprinter.js)
-
 <table>
 <tr>
   <td>
@@ -22,9 +20,9 @@
 
 You must provide GitHub credentials to run SprinterDash. They can be provided as environment variables: `GH_USERNAME`, `GH_PASSWORD`. In this case, they are picked up automatically and used. Or you can specify them in the `SprinterDash` constructor.
 
-## Start the sample server
+## Quick Start
 
-For this example to work, set the following environment variables: `GH_USERNAME`, `GH_PASSWORD`.
+For this example to work, simply clone this repo and set the following environment variables: `GH_USERNAME`, `GH_PASSWORD`. Then run:
 
     node index.js
 
