@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.8
+
+* Modal loading dialog.
+
 ## 0.1.7
 
 * Updated to sprinter 0.1.15.
