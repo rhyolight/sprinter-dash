@@ -14,11 +14,7 @@
 <div class="header">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-md-6">
-                <h1>{{title}}</h1>
-            </div>
-            <div class="col-md-6">
-
+            <div class="col-md-12">
                 <nav class="navbar navbar-default" role="navigation">
                     <div class="collapse navbar-collapse container-fluid" id="issue-filters">
                         <ul class="nav navbar-nav">
@@ -28,6 +24,19 @@
                             <li id="repo-filter" class="dropdown name-count"></li>
                             <li id="assignee-filter" class="dropdown name-count"></li>
                             <li id="label-filter" class="dropdown name-count"></li>
+
+                            <li>
+                                <div class="input-group">
+                                    <input id="text-search" type="text" class="form-control" placeholder="filter by text">
+                                    <span id="clear-search" class="glyphicon glyphicon-remove input-group-addon"></span>
+                                </div>
+                                <!--<form class="navbar-form navbar-left" role="search" id="issue-search">-->
+                                    <!--<div class="form-group">-->
+                                        <!--<input type="text" class="form-control" placeholder="Search">-->
+                                        <!--<span class="input-group-addon">X</span>-->
+                                    <!--</div>-->
+                                <!--</form>-->
+                            </li>
 
                             <li class="dropdown affliction">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>
@@ -41,9 +50,13 @@
                         </ul>
                     </div>
                 </nav>
-
             </div>
+        </div>
 
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{title}}</h1>
+            </div>
         </div>
     </div>
 </div>

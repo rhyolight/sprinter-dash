@@ -14,7 +14,11 @@ $(function() {
       , $stateFilter = $('#state-filter')
       , $labelFilter = $('#label-filter')
       , $issueFilters = $('#issue-filters')
+      , $textSearchField = $('#text-search')
+      , $clearSearch = $('#clear-search')
       , $loadingDialog = $('#modal-loading')
+        // For filtering by text.
+      , $issueItems = undefined
       , filterElements = {
             assignee: $assigneeFilter,
             repo: $repoFilter,
@@ -238,6 +242,20 @@ $(function() {
         };
     }
 
+    function filterIssuesByText(text) {
+        $issueItems.show();
+        if (! text) {
+            return;
+        }
+        $issueItems.each(function() {
+            var $issue = $(this)
+                , title = $issue.find('td.title a').html();
+            if (title.toLowerCase().indexOf(text.toLowerCase()) == -1) {
+                $issue.hide();
+            }
+        });
+    }
+
     function addFilterClickHandling() {
         function getLocalFilter(event, filterType) {
             var filter = extractFilterFrom(window.location.hash);
@@ -250,6 +268,13 @@ $(function() {
                 var filter = getLocalFilter(event, filterType);
                 render(filterIssues(allIssues, filter), filter);
             });
+        });
+        $clearSearch.click(function() {
+            $textSearchField.val('');
+            filterIssuesByText('');
+        });
+        $textSearchField.on('keyup', function() {
+            filterIssuesByText($textSearchField.val());
         });
     }
 
@@ -345,6 +370,8 @@ $(function() {
           , labels = extractIssueLabels(issues)
           ;
         renderTemplate($issues, issuesTemplate, issuesData);
+        // Now that issues are rendered, stash them for filtering.
+        $issueItems = $issues.find('tr.issue');
         renderTemplate($assigneeFilter, nameCountTemplate, assignees);
         renderTemplate($repoFilter, nameCountTemplate, repos);
         renderTemplate($milestoneFilter, nameCountTemplate, milestones);
