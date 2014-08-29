@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.1.10
+
+* Bugfix: org/repo names where 'org' and 'repo' are the same were not filtering properly
+* Bugfix: not applying text filter between characters of quickly typed words
+* Reporting errors on the server and client
+
 ## 0.1.9
 
 * Added text filter: https://github.com/rhyolight/sprinter-dash/issues/2

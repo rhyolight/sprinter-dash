@@ -30,7 +30,7 @@ $(function() {
       ;
 
     function endsWith(needle, haystack) {
-        return haystack.indexOf(needle) == haystack.length - needle.length;
+        return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
     }
 
     function extractFilterFrom(hash) {
@@ -257,6 +257,7 @@ $(function() {
     }
 
     function addFilterClickHandling() {
+        var lastKeyPress = undefined;
         function getLocalFilter(event, filterType) {
             var filter = extractFilterFrom(window.location.hash);
             filter[filterType] = $(event.currentTarget).data('name');
@@ -274,7 +275,15 @@ $(function() {
             filterIssuesByText('');
         });
         $textSearchField.on('keyup', function() {
-            filterIssuesByText($textSearchField.val());
+            // The timeout below allows users to quickly type words without 
+            // triggering a UI filter between characters.
+            var timePressed = new Date().getTime();
+            setTimeout(function() {
+                if (lastKeyPress == timePressed) {
+                    filterIssuesByText($textSearchField.val());
+                }
+            }, 200);
+            lastKeyPress = timePressed;
         });
     }
 
