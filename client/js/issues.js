@@ -14,6 +14,7 @@ $(function() {
       , $stateFilter = $('#state-filter')
       , $labelFilter = $('#label-filter')
       , $issueFilters = $('#issue-filters')
+      , $loadingDialog = $('#modal-loading')
       , filterElements = {
             assignee: $assigneeFilter,
             repo: $repoFilter,
@@ -354,7 +355,7 @@ $(function() {
         updateFilterLinks(filter);
     }
 
-    function loadPage(loadingMessage, callback) {
+    function loadPage(callback) {
         var filter = extractFilterFrom(window.location.hash)
           , affliction = filter.affliction
           , issuesUrl = urlPrefix + '_issues';
@@ -366,12 +367,16 @@ $(function() {
         else if (affliction == 'stale') {
             issuesUrl = urlPrefix + '_staleIssues';
         }
-        $issues.html('<h2>' + loadingMessage + '</h2>');
+        $loadingDialog.modal({
+            show: true
+          , keyboard: false
+        });
         $.getJSON(issuesUrl, function(response) {
             // Keep this as the master copy to start fresh when filters are applied.
             allIssues = response.issues;
             addGhostUnassigned(allIssues);
             render(filterIssues(allIssues, filter), filter);
+            $loadingDialog.modal('hide');
             if (callback) {
                 callback();
             }
@@ -397,7 +402,7 @@ $(function() {
                 return console.log(err);
             }
             nameCountTemplate = localNameCountTemplate;
-            loadPage("Loading...", function() {
+            loadPage(function() {
                 addAfflictionClickHandling();
                 setInterval(function() {
                     loadPage("Reloading...");
