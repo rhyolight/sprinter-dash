@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.9
+
+* Added text filter: https://github.com/rhyolight/sprinter-dash/issues/2
+* Re-mapped header.
+
 ## 0.1.8
 
 * Modal loading dialog.

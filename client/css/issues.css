@@ -89,3 +89,10 @@ td.labels span {
     border-radius: 3px;
     padding: 0 2px;
 }
+#issue-filters div.input-group {
+    width: 200px;
+    margin-top: 8px;
+}
+#issue-filters span#clear-search:hover {
+    cursor: pointer;
+}
