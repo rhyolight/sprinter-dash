@@ -87,13 +87,26 @@
 <script src="{{staticDir}}js/lib/async.js"></script>
 <script src="{{staticDir}}js/lib/moment.min.js"></script>
 <script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
-<script>
-    window.SPRINTERDASH = {
-        staticDir: "{{staticDir}}"
-      , urlPrefix: "{{urlPrefix}}"
-    };
-</script>
 <script src="{{staticDir}}js/issues.js"></script>
+<script>
+    $(function() {
+        var affliction = IssueView.extractFilterFromHash(window.location.hash).affliction;
+        var dataUrl = '{{urlPrefix}}_issues';
+        if (affliction) {
+            if (affliction == 'old') {
+                dataUrl = '{{urlPrefix}}_oldIssues';
+            } else if (affliction == 'stale') {
+                dataUrl = '{{urlPrefix}}_staleIssues';
+            }
+        }
+        new IssueView({
+            elementId: 'issues-container'
+          , filterId: 'issue-filters'
+          , staticDir: '{{staticDir}}'
+          , issuesUrl: dataUrl
+        }).load();
+    });
+</script>
 
 </body>
 </html>
