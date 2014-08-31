@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{{title}}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="{{staticDir}}bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}bootstrap/css/bootstrap-theme.min.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/style.css" rel="stylesheet" media="screen">
+    <link href="{{staticDir}}css/issues.css" rel="stylesheet" media="screen">
+</head>
+<body>
+
+<div class="header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="collapse navbar-collapse container-fluid" id="issue-filters">
+                        <ul class="nav navbar-nav">
+                            <li id="state-filter" class="dropdown name-count"></li>
+                            <li id="type-filter" class="dropdown name-count"></li>
+                            <li id="milestone-filter" class="dropdown name-count"></li>
+                            <li id="repo-filter" class="dropdown name-count"></li>
+                            <li id="assignee-filter" class="dropdown name-count"></li>
+                            <li id="label-filter" class="dropdown name-count"></li>
+
+                            <li>
+                                <div class="input-group">
+                                    <input id="text-search" type="text" class="form-control" placeholder="filter by text">
+                                    <span id="clear-search" class="glyphicon glyphicon-remove input-group-addon"></span>
+                                </div>
+                                <!--<form class="navbar-form navbar-left" role="search" id="issue-search">-->
+                                <!--<div class="form-group">-->
+                                <!--<input type="text" class="form-control" placeholder="Search">-->
+                                <!--<span class="input-group-addon">X</span>-->
+                                <!--</div>-->
+                                <!--</form>-->
+                            </li>
+
+                            <li class="dropdown affliction">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a href="">None</a></li>
+                                    <li><a href="#affliction=old">Old Issues</a></li>
+                                    <li><a href="#affliction=stale">Stale Issues</a></li>
+                                </ul>
+                            </li>
+
+                        </ul>
+                    </div>
+                </nav>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1>{{title}}</h1>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="powered-by">
+    Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a> & <a
+        href="https://github.com/rhyolight/travis-foreman" target="_blank">travis-foreman</a>.
+</div>
+
+<div class="modal fade" id="modal-loading" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="myModalLabel">Loading issues...</h4>
+            </div>
+            <div class="modal-body" align="center">
+                <img src="{{staticDir}}images/haters_gonna_hate.gif"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="issues-container"></div>
+
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+<script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.1.2.js"></script>
+<script src="{{staticDir}}js/lib/async.js"></script>
+<script src="{{staticDir}}js/lib/moment.min.js"></script>
+<script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
+<script>
+    window.SPRINTERDASH = {
+        staticDir: "{{staticDir}}"
+        , urlPrefix: "{{urlPrefix}}"
+    };
+</script>
+<script src="{{staticDir}}js/issues.js"></script>
+
+</body>
+</html>
