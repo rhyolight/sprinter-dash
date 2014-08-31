@@ -1,33 +1,6 @@
 $(function() {
 
-    var REFRESH_RATE = 3 * 60 * 1000 // 3 minutes
-      , allIssues
-      , staticDir = window.SPRINTERDASH.staticDir
-      , urlPrefix = window.SPRINTERDASH.urlPrefix
-      , issuesTemplate = undefined
-      , nameCountTemplate = undefined
-      , $issues = $('#issues-container')
-      , $assigneeFilter = $('#assignee-filter')
-      , $repoFilter = $('#repo-filter')
-      , $milestoneFilter = $('#milestone-filter')
-      , $typeFilter = $('#type-filter')
-      , $stateFilter = $('#state-filter')
-      , $labelFilter = $('#label-filter')
-      , $issueFilters = $('#issue-filters')
-      , $textSearchField = $('#text-search')
-      , $clearSearch = $('#clear-search')
-      , $loadingDialog = $('#modal-loading')
-        // For filtering by text.
-      , $issueItems = undefined
-      , filterElements = {
-            assignee: $assigneeFilter,
-            repo: $repoFilter,
-            milestone: $milestoneFilter,
-            type: $typeFilter,
-            state: $stateFilter,
-            label: $labelFilter
-        }
-      ;
+    var DEFAULT_REFRESH_RATE = 3 * 60 * 1000; // 3 minutes
 
     function endsWith(needle, haystack) {
         return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
@@ -62,7 +35,7 @@ $(function() {
         });
     }
 
-    function convertIssuesToTemplateData(issues) {
+    function convertIssuesToTemplateData(issues, staticDir) {
         var now = new Date();
         return {
             issues: _.map(issues, function(issue) {
@@ -242,53 +215,76 @@ $(function() {
         };
     }
 
-    function filterIssuesByText(text) {
-        $issueItems.show();
+    function IssueView(cfg) {
+        this.$issues = $('#' + cfg.elementId);
+        this.$filter = $('#' + cfg.filterId);
+        this.config = cfg;
+        this.issuesUrl = cfg.issuesUrl;
+        this.refreshRate = cfg.refreshRate;
+        if (this.refreshRate == undefined) {
+            this.refreshRate = DEFAULT_REFRESH_RATE;
+        }
+        this.filterElements = {
+            assignee: this.$filter.find('#assignee-filter'),
+            repo: this.$filter.find('#repo-filter'),
+            milestone: this.$filter.find('#repo-filter'),
+            type: this.$filter.find('#type-filter'),
+            state: this.$filter.find('#state-filter'),
+            label: this.$filter.find('#label-filter')
+        };
+        this.$textSearchField = this.$filter.find('#text-search');
+        this.$clearSearch = this.$filter.find('#clear-search');
+        this.$loadingDialog = $('#modal-loading');
+    }
+
+    IssueView.prototype.filterIssuesByText = function(text) {
+        this.$issueItems.show();
         if (! text) {
             return;
         }
-        $issueItems.each(function() {
+        this.$issueItems.each(function() {
             var $issue = $(this)
                 , title = $issue.find('td.title a').html();
             if (title.toLowerCase().indexOf(text.toLowerCase()) == -1) {
                 $issue.hide();
             }
         });
-    }
+    };
 
-    function addFilterClickHandling() {
-        var lastKeyPress = undefined;
+    IssueView.prototype.addFilterClickHandling = function() {
+        var me = this
+          , lastKeyPress = undefined;
         function getLocalFilter(event, filterType) {
             var filter = extractFilterFrom(window.location.hash);
             filter[filterType] = $(event.currentTarget).data('name');
             return filter;
         }
-        _.each(filterElements, function($filterElement, filterType) {
+        _.each(me.filterElements, function($filterElement, filterType) {
             // On filter click, filters all issues by filter type clicked.
             $filterElement.find('ul li').click(function(event) {
                 var filter = getLocalFilter(event, filterType);
-                render(filterIssues(allIssues, filter), filter);
+                me.render(filterIssues(me.allIssues, filter), filter);
             });
         });
-        $clearSearch.click(function() {
-            $textSearchField.val('');
-            filterIssuesByText('');
+        me.$clearSearch.click(function() {
+            me.$textSearchField.val('');
+            me.filterIssuesByText('');
         });
-        $textSearchField.on('keyup', function() {
+        me.$textSearchField.on('keyup', function() {
             // The timeout below allows users to quickly type words without 
             // triggering a UI filter between characters.
             var timePressed = new Date().getTime();
             setTimeout(function() {
                 if (lastKeyPress == timePressed) {
-                    filterIssuesByText($textSearchField.val());
+                    me.filterIssuesByText(me.$textSearchField.val());
                 }
             }, 200);
             lastKeyPress = timePressed;
         });
     }
 
-    function updateFilterLinks(filter) {
-        _.each(filterElements, function($filterElement, filterType) {
+    IssueView.prototype.updateFilterLinks = function(filter) {
+        _.each(this.filterElements, function($filterElement, filterType) {
             // Remove any selections on current filter triggers
             $filterElement.find('ul li').removeClass('active');
             // Add active to chosen filters.
@@ -296,7 +292,7 @@ $(function() {
         });
 
         // Update href links with new filter
-        $issueFilters.find('ul li.name-count ul li').each(function() {
+        this.$filter.find('ul li.name-count ul li').each(function() {
             var $item = $(this)
               , $link = $item.find('a')
               , pieces = $link.attr('href').split('#')
@@ -308,7 +304,7 @@ $(function() {
             updatedFilter = _.extend({}, filter, linkFilter);
             $link.attr('href', pieces[0] + '#' + $.param(updatedFilter));
         });
-    }
+    };
 
     function renderTemplate($element, templateName, data) {
         var template = Handlebars.compile($('#' + templateName).html());
@@ -358,92 +354,93 @@ $(function() {
         return filteredIssues;
     }
 
-    function addGhostUnassigned(issues) {
+    function addGhostUnassigned(issues, unassignedImageUrl) {
         _.each(issues, function(issue) {
             if (! issue.assignee) {
                 issue.assignee = {
                     login: 'unassigned',
-                    avatar_url: staticDir + 'images/unassigned.png'
+                    avatar_url: unassignedImageUrl
                 };
             }
         });
     }
 
-    function render(issues, filter) {
-        var issuesData = convertIssuesToTemplateData(issues)
+    IssueView.prototype.render = function(issues, filter) {
+        var issuesData = convertIssuesToTemplateData(issues, this.config.staticDir)
           , assignees = extractIssueAssignees(issues)
           , repos = extractIssueRepos(issues)
           , milestones = extractIssueMilestones(issues)
           , types = extractIssueTypes(issues)
           , states = extractIssueStates(issues)
           , labels = extractIssueLabels(issues)
+          , nameCountTemplate = this.nameCountTemplate
           ;
-        renderTemplate($issues, issuesTemplate, issuesData);
+        renderTemplate(this.$issues, this.issuesTemplate, issuesData);
         // Now that issues are rendered, stash them for filtering.
-        $issueItems = $issues.find('tr.issue');
-        renderTemplate($assigneeFilter, nameCountTemplate, assignees);
-        renderTemplate($repoFilter, nameCountTemplate, repos);
-        renderTemplate($milestoneFilter, nameCountTemplate, milestones);
-        renderTemplate($typeFilter, nameCountTemplate, types);
-        renderTemplate($stateFilter, nameCountTemplate, states);
-        renderTemplate($labelFilter, nameCountTemplate, labels);
-        addFilterClickHandling();
-        updateFilterLinks(filter);
-    }
+        this.$issueItems = this.$issues.find('tr.issue');
+        renderTemplate(this.filterElements.assignee, nameCountTemplate, assignees);
+        renderTemplate(this.filterElements.repo, nameCountTemplate, repos);
+        renderTemplate(this.filterElements.milestone, nameCountTemplate, milestones);
+        renderTemplate(this.filterElements.type, nameCountTemplate, types);
+        renderTemplate(this.filterElements.state, nameCountTemplate, states);
+        renderTemplate(this.filterElements.label, nameCountTemplate, labels);
+        this.addFilterClickHandling();
+        this.updateFilterLinks(filter);
+    };
 
-    function loadPage(callback) {
-        var filter = extractFilterFrom(window.location.hash)
-          , affliction = filter.affliction
-          , issuesUrl = urlPrefix + '_issues';
-        // Old issues were created_at a long time ago.
-        if (affliction == 'old') {
-            issuesUrl = urlPrefix + '_oldIssues';
-        }
-        // Stale issues were updated_at a long time ago.
-        else if (affliction == 'stale') {
-            issuesUrl = urlPrefix + '_staleIssues';
-        }
-        $loadingDialog.modal({
+    IssueView.prototype.loadPage = function(issuesUrl, callback) {
+        var me = this
+          , filter = extractFilterFrom(window.location.hash)
+          , issuesUrl = this.issuesUrl;
+        me.$loadingDialog.modal({
             show: true
           , keyboard: false
         });
         $.getJSON(issuesUrl, function(response) {
             // Keep this as the master copy to start fresh when filters are applied.
-            allIssues = response.issues;
-            addGhostUnassigned(allIssues);
-            render(filterIssues(allIssues, filter), filter);
-            $loadingDialog.modal('hide');
+            me.allIssues = response.issues;
+            addGhostUnassigned(me.allIssues, me.config.staticDir + 'images/unassigned.png');
+            me.render(filterIssues(me.allIssues, filter), filter);
+            me.$loadingDialog.modal('hide');
             if (callback) {
                 callback();
             }
         });
     }
 
-    function addAfflictionClickHandling() {
-        $('li.affliction ul li a').click(function() {
+    IssueView.prototype.addAfflictionClickHandling = function() {
+        this.$filter.find('li.affliction ul li a').click(function() {
             var $link = $(this)
               , href = $link.attr('href');
             window.location.hash = href;
             location.reload(true);
         });
-    }
+    };
 
-    loadTemplate(staticDir + 'templates/issues.html', 'issues', function(err, localIssuesTemplate) {
-        if (err) {
-            return console.log(err);
-        }
-        issuesTemplate = localIssuesTemplate;
-        loadTemplate(staticDir + 'templates/name-count.html', 'namecount', function(err, localNameCountTemplate) {
+    IssueView.prototype.load = function(dataUrl, callback) {
+        var me = this
+          , staticDir = this.config.staticDir;
+        loadTemplate(staticDir + 'templates/issues.html', 'issues', function(err, localIssuesTemplate) {
             if (err) {
                 return console.log(err);
             }
-            nameCountTemplate = localNameCountTemplate;
-            loadPage(function() {
-                addAfflictionClickHandling();
-                setInterval(function() {
-                    loadPage("Reloading...");
-                }, REFRESH_RATE);
+            me.issuesTemplate = localIssuesTemplate;
+            loadTemplate(staticDir + 'templates/name-count.html', 'namecount', function(err, localNameCountTemplate) {
+                if (err) {
+                    return console.log(err);
+                }
+                me.nameCountTemplate = localNameCountTemplate;
+                me.loadPage(dataUrl, function() {
+                    me.addAfflictionClickHandling();
+                    setInterval(function() {
+                        me.loadPage("Reloading...");
+                    }, me.refreshRate);
+                });
             });
         });
-    });
+    };
+
+    IssueView.extractFilterFromHash = extractFilterFrom;
+    window.IssueView = IssueView;
+
 });
