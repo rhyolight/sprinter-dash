@@ -18,10 +18,10 @@
     "async": "^0.9.0",
     "express": "3.4.7",
     "handlebars": "^2.0.0-alpha.4",
+    "lodash": "^2.4.1",
     "moment": "^2.8.2",
     "sprinter": "^0.1.15",
-    "travis-foreman": "0.0.3",
-    "underscore": "1.5.2"
+    "travis-foreman": "0.0.3"
   },
   "engines": {
     "node": "0.10.x"
