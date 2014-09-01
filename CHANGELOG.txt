@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.13
+
+* Refactored out FilterView class: https://github.com/rhyolight/sprinter-dash/issues/7
+* Bugfix: missing repository filter.
+
 ## 0.1.12
 
 * Bugfix: bad link to user report from issue page when urlPrefix is /.
