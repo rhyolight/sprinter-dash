@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.12
+
+* Bugfix: bad link to user report from issue page when urlPrefix is /.
+
 ## 0.1.11
 
 * Added user report at <url-prefix>/issues/:login.
