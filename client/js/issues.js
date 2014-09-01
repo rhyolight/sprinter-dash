@@ -216,24 +216,30 @@ $(function() {
     }
 
     function IssueView(cfg) {
+        if (! cfg.issuesUrl && ! cfg.issues) {
+            throw new Error('Cannot load IssuesView without either a data ' +
+                'URL or array of issues to show.');
+        }
         this.$issues = $('#' + cfg.elementId);
-        this.$filter = $('#' + cfg.filterId);
         this.config = cfg;
         this.issuesUrl = cfg.issuesUrl;
         this.refreshRate = cfg.refreshRate;
         if (this.refreshRate == undefined) {
             this.refreshRate = DEFAULT_REFRESH_RATE;
         }
-        this.filterElements = {
-            assignee: this.$filter.find('#assignee-filter'),
-            repo: this.$filter.find('#repo-filter'),
-            milestone: this.$filter.find('#repo-filter'),
-            type: this.$filter.find('#type-filter'),
-            state: this.$filter.find('#state-filter'),
-            label: this.$filter.find('#label-filter')
-        };
-        this.$textSearchField = this.$filter.find('#text-search');
-        this.$clearSearch = this.$filter.find('#clear-search');
+        if (cfg.filterId) {
+            this.$filter = $('#' + cfg.filterId);
+            this.filterElements = {
+                assignee: this.$filter.find('#assignee-filter'),
+                repo: this.$filter.find('#repo-filter'),
+                milestone: this.$filter.find('#repo-filter'),
+                type: this.$filter.find('#type-filter'),
+                state: this.$filter.find('#state-filter'),
+                label: this.$filter.find('#label-filter')
+            };
+            this.$textSearchField = this.$filter.find('#text-search');
+            this.$clearSearch = this.$filter.find('#clear-search');
+        }
         this.$loadingDialog = $('#modal-loading');
     }
 
@@ -281,7 +287,7 @@ $(function() {
             }, 200);
             lastKeyPress = timePressed;
         });
-    }
+    };
 
     IssueView.prototype.updateFilterLinks = function(filter) {
         _.each(this.filterElements, function($filterElement, filterType) {
@@ -376,37 +382,54 @@ $(function() {
           , nameCountTemplate = this.nameCountTemplate
           ;
         renderTemplate(this.$issues, this.issuesTemplate, issuesData);
-        // Now that issues are rendered, stash them for filtering.
-        this.$issueItems = this.$issues.find('tr.issue');
-        renderTemplate(this.filterElements.assignee, nameCountTemplate, assignees);
-        renderTemplate(this.filterElements.repo, nameCountTemplate, repos);
-        renderTemplate(this.filterElements.milestone, nameCountTemplate, milestones);
-        renderTemplate(this.filterElements.type, nameCountTemplate, types);
-        renderTemplate(this.filterElements.state, nameCountTemplate, states);
-        renderTemplate(this.filterElements.label, nameCountTemplate, labels);
-        this.addFilterClickHandling();
-        this.updateFilterLinks(filter);
+        if (this.$filter) {
+            // Now that issues are rendered, stash them for filtering.
+            this.$issueItems = this.$issues.find('tr.issue');
+            renderTemplate(this.filterElements.assignee, nameCountTemplate, assignees);
+            renderTemplate(this.filterElements.repo, nameCountTemplate, repos);
+            renderTemplate(this.filterElements.milestone, nameCountTemplate, milestones);
+            renderTemplate(this.filterElements.type, nameCountTemplate, types);
+            renderTemplate(this.filterElements.state, nameCountTemplate, states);
+            renderTemplate(this.filterElements.label, nameCountTemplate, labels);
+            this.addFilterClickHandling();
+            this.updateFilterLinks(filter);
+        }
+    };
+
+    IssueView.prototype.showLoading = function(showLoading) {
+        if (showLoading) {
+            this.$loadingDialog.modal({
+                show: true
+                , keyboard: false
+            });
+        } else {
+            this.$loadingDialog.modal('hide');
+        }
     };
 
     IssueView.prototype.loadPage = function(issuesUrl, callback) {
         var me = this
           , filter = extractFilterFrom(window.location.hash)
           , issuesUrl = this.issuesUrl;
-        me.$loadingDialog.modal({
-            show: true
-          , keyboard: false
-        });
-        $.getJSON(issuesUrl, function(response) {
+        function handleIssues(issues, cb) {
             // Keep this as the master copy to start fresh when filters are applied.
-            me.allIssues = response.issues;
+            me.allIssues = issues;
             addGhostUnassigned(me.allIssues, me.config.staticDir + 'images/unassigned.png');
             me.render(filterIssues(me.allIssues, filter), filter);
-            me.$loadingDialog.modal('hide');
-            if (callback) {
-                callback();
+            if (cb) {
+                cb();
             }
-        });
-    }
+        }
+        if (issuesUrl) {
+            me.showLoading(true);
+            $.getJSON(issuesUrl, function(response) {
+                handleIssues(response.issues);
+                me.showLoading(false);
+            });
+        } else {
+            handleIssues(me.config.issues);
+        }
+    };
 
     IssueView.prototype.addAfflictionClickHandling = function() {
         this.$filter.find('li.affliction ul li a').click(function() {
@@ -431,7 +454,9 @@ $(function() {
                 }
                 me.nameCountTemplate = localNameCountTemplate;
                 me.loadPage(dataUrl, function() {
-                    me.addAfflictionClickHandling();
+                    if (me.$filter) {
+                        me.addAfflictionClickHandling();
+                    }
                     setInterval(function() {
                         me.loadPage("Reloading...");
                     }, me.refreshRate);

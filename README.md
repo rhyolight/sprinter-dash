@@ -64,7 +64,10 @@ You can create an instance of `SprinterDash` and attach it to an existing Expres
     dash.attach(app, 'dashboard');
     app.listen(8080);
 
-SprinterDash will be running on `http://localhost:8080/dashboard`.
+SprinterDash will be running on `http://localhost:8080/dashboard`. The following views are available, where `<url-prefix>` is `dashboard` in the above example:
+
+- `/<url-prefix>/issues` will display all issues within the past 2 months with a filter bar.
+- `/<url-prefix>/issues/:login` will display issues assigned to the user specified by `:login`, as well as issues mentioning the same user.
 
 ### Available Data Routes
 
