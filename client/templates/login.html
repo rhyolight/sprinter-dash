@@ -13,45 +13,45 @@
 
 <div class="header">
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <nav class="navbar navbar-default" role="navigation">
-                    <div class="collapse navbar-collapse container-fluid" id="issue-filters">
-                        <ul class="nav navbar-nav">
-                            <li id="state-filter" class="dropdown name-count"></li>
-                            <li id="type-filter" class="dropdown name-count"></li>
-                            <li id="milestone-filter" class="dropdown name-count"></li>
-                            <li id="repo-filter" class="dropdown name-count"></li>
-                            <li id="assignee-filter" class="dropdown name-count"></li>
-                            <li id="label-filter" class="dropdown name-count"></li>
+        <!--<div class="row">-->
+            <!--<div class="col-md-12">-->
+                <!--<nav class="navbar navbar-default" role="navigation">-->
+                    <!--<div class="collapse navbar-collapse container-fluid" id="issue-filters">-->
+                        <!--<ul class="nav navbar-nav">-->
+                            <!--<li id="state-filter" class="dropdown name-count"></li>-->
+                            <!--<li id="type-filter" class="dropdown name-count"></li>-->
+                            <!--<li id="milestone-filter" class="dropdown name-count"></li>-->
+                            <!--<li id="repo-filter" class="dropdown name-count"></li>-->
+                            <!--<li id="assignee-filter" class="dropdown name-count"></li>-->
+                            <!--<li id="label-filter" class="dropdown name-count"></li>-->
 
-                            <li>
-                                <div class="input-group">
-                                    <input id="text-search" type="text" class="form-control" placeholder="filter by text">
-                                    <span id="clear-search" class="glyphicon glyphicon-remove input-group-addon"></span>
-                                </div>
-                                <!--<form class="navbar-form navbar-left" role="search" id="issue-search">-->
-                                <!--<div class="form-group">-->
-                                <!--<input type="text" class="form-control" placeholder="Search">-->
-                                <!--<span class="input-group-addon">X</span>-->
+                            <!--<li>-->
+                                <!--<div class="input-group">-->
+                                    <!--<input id="text-search" type="text" class="form-control" placeholder="filter by text">-->
+                                    <!--<span id="clear-search" class="glyphicon glyphicon-remove input-group-addon"></span>-->
                                 <!--</div>-->
-                                <!--</form>-->
-                            </li>
+                                <!--&lt;!&ndash;<form class="navbar-form navbar-left" role="search" id="issue-search">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<input type="text" class="form-control" placeholder="Search">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<span class="input-group-addon">X</span>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
+                                <!--&lt;!&ndash;</form>&ndash;&gt;-->
+                            <!--</li>-->
 
-                            <li class="dropdown affliction">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>
-                                <ul class="dropdown-menu" role="menu">
-                                    <li><a href="">None</a></li>
-                                    <li><a href="#affliction=old">Old Issues</a></li>
-                                    <li><a href="#affliction=stale">Stale Issues</a></li>
-                                </ul>
-                            </li>
+                            <!--<li class="dropdown affliction">-->
+                                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>-->
+                                <!--<ul class="dropdown-menu" role="menu">-->
+                                    <!--<li><a href="">None</a></li>-->
+                                    <!--<li><a href="#affliction=old">Old Issues</a></li>-->
+                                    <!--<li><a href="#affliction=stale">Stale Issues</a></li>-->
+                                <!--</ul>-->
+                            <!--</li>-->
 
-                        </ul>
-                    </div>
-                </nav>
-            </div>
-        </div>
+                        <!--</ul>-->
+                    <!--</div>-->
+                <!--</nav>-->
+            <!--</div>-->
+        <!--</div>-->
 
         <div class="row">
             <div class="col-md-12">
@@ -79,7 +79,24 @@
     </div>
 </div>
 
-<div id="issues-container"></div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Assigned Issues</h2>
+        </div>
+        <div class="col-md-6">
+            <h2>Mentioned Issues</h2>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div id="assigned-container"></div>
+        </div>
+        <div class="col-md-6">
+            <div id="mentioned-container"></div>
+        </div>
+    </div>
+</div>
 
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
@@ -88,10 +105,30 @@
 <script src="{{staticDir}}js/lib/moment.min.js"></script>
 <script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
 <script>
-    window.SPRINTERDASH = {
-        staticDir: "{{staticDir}}"
-        , urlPrefix: "{{urlPrefix}}"
-    };
+    $(function() {
+        var $loadingDialog = $('#modal-loading');
+        $loadingDialog.modal({
+            show: true
+          , keyboard: false
+        });
+        $.getJSON('{{urlPrefix}}_issues/{{login}}', function(response) {
+            var assigned = response.assigned.issues
+              , mentioned = response.mentioned.issues;
+
+            new IssueView({
+                elementId: 'assigned-container'
+              , staticDir: '{{staticDir}}'
+              , issues: assigned
+            }).load();
+
+            new IssueView({
+                elementId: 'mentioned-container'
+              , staticDir: '{{staticDir}}'
+              , issues: mentioned
+            }).load();
+            $loadingDialog.modal('hide');
+        });
+    });
 </script>
 <script src="{{staticDir}}js/issues.js"></script>
 
