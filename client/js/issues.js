@@ -233,7 +233,7 @@ $(function() {
             this.filterElements = {
                 assignee: this.$filter.find('#assignee-filter'),
                 repo: this.$filter.find('#repo-filter'),
-                milestone: this.$filter.find('#repo-filter'),
+                milestone: this.$filter.find('#milestone-filter'),
                 type: this.$filter.find('#type-filter'),
                 state: this.$filter.find('#state-filter'),
                 label: this.$filter.find('#label-filter')
