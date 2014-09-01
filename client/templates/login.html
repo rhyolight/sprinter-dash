@@ -118,12 +118,14 @@
             new IssueView({
                 elementId: 'assigned-container'
               , staticDir: '{{staticDir}}'
+              , urlPrefix: '{{urlPrefix}}'
               , issues: assigned
             }).load();
 
             new IssueView({
                 elementId: 'mentioned-container'
               , staticDir: '{{staticDir}}'
+              , urlPrefix: '{{urlPrefix}}'
               , issues: mentioned
             }).load();
             $loadingDialog.modal('hide');

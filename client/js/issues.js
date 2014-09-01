@@ -35,7 +35,7 @@ $(function() {
         });
     }
 
-    function convertIssuesToTemplateData(issues, staticDir) {
+    function convertIssuesToTemplateData(issues, staticDir, urlPrefix) {
         var now = new Date();
         return {
             issues: _.map(issues, function(issue) {
@@ -51,8 +51,9 @@ $(function() {
                     }
                 });
                 return issue;
-            }),
-            staticDir: staticDir
+            })
+          , staticDir: staticDir
+          , urlPrefix: urlPrefix
         };
     }
 
@@ -372,7 +373,7 @@ $(function() {
     }
 
     IssueView.prototype.render = function(issues, filter) {
-        var issuesData = convertIssuesToTemplateData(issues, this.config.staticDir)
+        var issuesData = convertIssuesToTemplateData(issues, this.config.staticDir, this.config.urlPrefix)
           , assignees = extractIssueAssignees(issues)
           , repos = extractIssueRepos(issues)
           , milestones = extractIssueMilestones(issues)
