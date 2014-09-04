@@ -68,6 +68,7 @@ SprinterDash will be running on `http://localhost:8080/dashboard`. The following
 
 - `/<url-prefix>/issues` will display all issues within the past 2 months with a filter bar.
 - `/<url-prefix>/issues/:login` will display issues assigned to the user specified by `:login`, as well as issues mentioning the same user.
+- `/<url-prefix>/priority` will display issues in priority order if you have `P1`, `P2`, `P3`, & `P4` labels. 
 
 ### Available Data Routes
 
