@@ -194,16 +194,22 @@ $(function() {
     }
 
     function FilterView(cfg, callback) {
-        var me = this;
+        var me = this
+          , showAffliction = true;
         if (cfg.issues) {
             me.issues = cfg.issues;
+        }
+        if (cfg.showAffliction != undefined) {
+            showAffliction = Boolean(cfg.showAffliction);
         }
         me.listeners = [];
         loadTemplate(cfg.staticDir + 'templates/filter.html', 'filter', function(err, filterTemplate) {
             loadTemplate(cfg.staticDir + 'templates/name-count.html', 'namecount', function(err, nameCountTemplate) {
                 me.nameCountTemplate = nameCountTemplate;
                 me.$filter = $('#' + cfg.elementId);
-                renderTemplate(me.$filter, filterTemplate, {});
+                renderTemplate(me.$filter, filterTemplate, {
+                    showAffliction: showAffliction
+                });
                 me.filterElements = {
                     assignee: me.$filter.find('#assignee-filter'),
                     repo: me.$filter.find('#repo-filter'),
