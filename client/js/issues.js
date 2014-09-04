@@ -8,9 +8,9 @@ $(function() {
 
     function extractFilterFrom(hash) {
         var params = {milestone: 'all', repo: 'all', assignee: 'all', type: 'all', state: 'open'}
-          , temp
-          , items = hash.slice(1).split("&") // remove leading # and split
-          , i;
+            , temp
+            , items = hash.slice(1).split("&") // remove leading # and split
+            , i;
         for (i = 0; i < items.length; i++) {
             temp = items[i].split("=");
             if (temp[0]) {
@@ -57,165 +57,6 @@ $(function() {
         };
     }
 
-    function extractIssueAssignees(issues) {
-        var all = {
-            name: 'all', count: 0
-        }, assignees = [];
-        _.each(issues, function(issue) {
-            if (issue.assignee) {
-                var name = issue.assignee.login
-                    , assignee = _.find(assignees, function(a) { return a.name == name; });
-                if (! assignee) {
-                    assignees.push({
-                        name: name,
-                        count: 1
-                    });
-                } else {
-                    assignee.count++;
-                }
-                all.count++;
-            }
-        });
-        assignees = _.sortBy(assignees, function(a) { return a.count; }).reverse()
-        assignees.unshift(all);
-        return {
-            items: assignees
-          , title: 'Assignees'
-          , type: 'assignee'
-        };
-    }
-
-    function extractIssueTypes(issues) {
-        var all = {
-            name: 'all', count: 0
-        }, issuesOut = {
-            name: 'issues', count: 0
-        }, prs = {
-            name: 'pull requests', count: 0
-        }, allIssuesOut = [all, issuesOut, prs];
-        _.each(issues, function(issue) {
-            if (issue.pull_request) {
-                prs.count++;
-            } else {
-                issuesOut.count++;
-            }
-            all.count++;
-        });
-        return {
-            items: allIssuesOut
-          , title: 'Type'
-          , type: 'type'
-        };
-    }
-
-    function extractIssueStates(issues) {
-        var all = {
-            name: 'all', count: 0
-        }, open = {
-            name: 'open', count: 0
-        }, closed = {
-            name: 'closed', count: 0
-        }, allIssuesOut = [all, open, closed];
-        _.each(issues, function(issue) {
-            if (issue.state == 'open') {
-                open.count++;
-            } else {
-                closed.count++;
-            }
-            all.count++;
-        });
-        return {
-            items: allIssuesOut
-          , title: 'State'
-          , type: 'state'
-        };
-    }
-
-    function extractIssueRepos(issues) {
-        var all = {
-                name: 'all', count: 0
-            },
-            reposOut = [];
-        _.each(issues, function(issue) {
-            var repoName = issue.repo.split('/').pop()
-              , repo = _.find(reposOut, function(repo) { return repo.name == repoName; });
-            if (! repo) {
-                reposOut.push({
-                    name: repoName,
-                    count: 1
-                });
-            } else {
-                repo.count++;
-            }
-            all.count++;
-        });
-        reposOut = _.sortBy(reposOut, function(r) { return r.count; }).reverse()
-        reposOut.unshift(all);
-        return {
-            items: reposOut
-          , title: 'Repositories'
-          , type: 'repo'
-        };
-    }
-
-
-    function extractIssueMilestones(issues) {
-        var all = {
-                name: 'all', count: 0
-            },
-            milestonesOut = [all];
-        _.each(issues, function(issue) {
-            var milestone = _.find(milestonesOut, function(ms) { return issue.milestone.title == ms.name; });
-            if (! milestone) {
-                milestonesOut.push({
-                    name: issue.milestone.title,
-                    count: 1
-                });
-            } else {
-                milestone.count++;
-            }
-            all.count++;
-        });
-        milestonesOut = _.sortBy(milestonesOut, function(ms) {
-            return ms.name.toLowerCase();
-        });
-        return {
-            items: milestonesOut
-          , title: 'Sprints'
-          , type: 'milestone'
-        };
-    }
-
-    function extractIssueLabels(issues) {
-        var all = {
-                name: 'all', count: 0
-            }
-          , labelsOut = [];
-        _.each(issues, function(issue) {
-            _.each(issue.labels, function(label) {
-                var existingLabel = _.find(labelsOut, function(l) {
-                    return l.name == label.name;
-                });
-                if (existingLabel) {
-                    existingLabel.count++;
-                } else {
-                    labelsOut.push({
-                        name: label.name,
-                        count: 1
-                    });
-                }
-            });
-            all.count++;
-        });
-        labelsOut = _.sortBy(labelsOut, function(l) { return l.name; });
-        labelsOut.unshift(all);
-        return {
-            items: labelsOut
-          , title: 'Labels'
-          , type: 'label'
-        };
-    }
-
     function IssueView(cfg) {
         if (! cfg.issuesUrl && ! cfg.issues) {
             throw new Error('Cannot load IssuesView without either a data ' +
@@ -228,20 +69,8 @@ $(function() {
         if (this.refreshRate == undefined) {
             this.refreshRate = DEFAULT_REFRESH_RATE;
         }
-        if (cfg.filterId) {
-            this.$filter = $('#' + cfg.filterId);
-            this.filterElements = {
-                assignee: this.$filter.find('#assignee-filter'),
-                repo: this.$filter.find('#repo-filter'),
-                milestone: this.$filter.find('#repo-filter'),
-                type: this.$filter.find('#type-filter'),
-                state: this.$filter.find('#state-filter'),
-                label: this.$filter.find('#label-filter')
-            };
-            this.$textSearchField = this.$filter.find('#text-search');
-            this.$clearSearch = this.$filter.find('#clear-search');
-        }
         this.$loadingDialog = $('#modal-loading');
+        return this;
     }
 
     IssueView.prototype.filterIssuesByText = function(text) {
@@ -255,61 +84,6 @@ $(function() {
             if (title.toLowerCase().indexOf(text.toLowerCase()) == -1) {
                 $issue.hide();
             }
-        });
-    };
-
-    IssueView.prototype.addFilterClickHandling = function() {
-        var me = this
-          , lastKeyPress = undefined;
-        function getLocalFilter(event, filterType) {
-            var filter = extractFilterFrom(window.location.hash);
-            filter[filterType] = $(event.currentTarget).data('name');
-            return filter;
-        }
-        _.each(me.filterElements, function($filterElement, filterType) {
-            // On filter click, filters all issues by filter type clicked.
-            $filterElement.find('ul li').click(function(event) {
-                var filter = getLocalFilter(event, filterType);
-                me.render(filterIssues(me.allIssues, filter), filter);
-            });
-        });
-        me.$clearSearch.click(function() {
-            me.$textSearchField.val('');
-            me.filterIssuesByText('');
-        });
-        me.$textSearchField.on('keyup', function() {
-            // The timeout below allows users to quickly type words without 
-            // triggering a UI filter between characters.
-            var timePressed = new Date().getTime();
-            setTimeout(function() {
-                if (lastKeyPress == timePressed) {
-                    me.filterIssuesByText(me.$textSearchField.val());
-                }
-            }, 200);
-            lastKeyPress = timePressed;
-        });
-    };
-
-    IssueView.prototype.updateFilterLinks = function(filter) {
-        _.each(this.filterElements, function($filterElement, filterType) {
-            // Remove any selections on current filter triggers
-            $filterElement.find('ul li').removeClass('active');
-            // Add active to chosen filters.
-            $filterElement.find('ul li[data-name=\'' + filter[filterType] + '\']').addClass('active');
-        });
-
-        // Update href links with new filter
-        this.$filter.find('ul li.name-count ul li').each(function() {
-            var $item = $(this)
-              , $link = $item.find('a')
-              , pieces = $link.attr('href').split('#')
-              , name = $item.data('name')
-              , type = $item.data('type')
-              , linkFilter = {}
-              , updatedFilter;
-            linkFilter[type] = name;
-            updatedFilter = _.extend({}, filter, linkFilter);
-            $link.attr('href', pieces[0] + '#' + $.param(updatedFilter));
         });
     };
 
@@ -373,27 +147,13 @@ $(function() {
     }
 
     IssueView.prototype.render = function(issues, filter) {
-        var issuesData = convertIssuesToTemplateData(issues, this.config.staticDir, this.config.urlPrefix)
-          , assignees = extractIssueAssignees(issues)
-          , repos = extractIssueRepos(issues)
-          , milestones = extractIssueMilestones(issues)
-          , types = extractIssueTypes(issues)
-          , states = extractIssueStates(issues)
-          , labels = extractIssueLabels(issues)
-          , nameCountTemplate = this.nameCountTemplate
-          ;
+        var issuesData = convertIssuesToTemplateData(
+           issues, this.config.staticDir, this.config.urlPrefix
+        );
         renderTemplate(this.$issues, this.issuesTemplate, issuesData);
         if (this.$filter) {
             // Now that issues are rendered, stash them for filtering.
             this.$issueItems = this.$issues.find('tr.issue');
-            renderTemplate(this.filterElements.assignee, nameCountTemplate, assignees);
-            renderTemplate(this.filterElements.repo, nameCountTemplate, repos);
-            renderTemplate(this.filterElements.milestone, nameCountTemplate, milestones);
-            renderTemplate(this.filterElements.type, nameCountTemplate, types);
-            renderTemplate(this.filterElements.state, nameCountTemplate, states);
-            renderTemplate(this.filterElements.label, nameCountTemplate, labels);
-            this.addFilterClickHandling();
-            this.updateFilterLinks(filter);
         }
     };
 
@@ -410,8 +170,7 @@ $(function() {
 
     IssueView.prototype.loadPage = function(issuesUrl, callback) {
         var me = this
-          , filter = extractFilterFrom(window.location.hash)
-          , issuesUrl = this.issuesUrl;
+          , filter = extractFilterFrom(window.location.hash);
         function handleIssues(issues, cb) {
             // Keep this as the master copy to start fresh when filters are applied.
             me.allIssues = issues;
@@ -425,6 +184,14 @@ $(function() {
             me.showLoading(true);
             $.getJSON(issuesUrl, function(response) {
                 handleIssues(response.issues);
+                if (me.config.filterId) {
+                    me.setFilterView(new FilterView({
+                        elementId: 'issue-filters'
+                      , staticDir: me.config.staticDir
+                      , issues: response.issues
+                      , showAffliction: true
+                    }));
+                }
                 me.showLoading(false);
             });
         } else {
@@ -432,16 +199,7 @@ $(function() {
         }
     };
 
-    IssueView.prototype.addAfflictionClickHandling = function() {
-        this.$filter.find('li.affliction ul li a').click(function() {
-            var $link = $(this)
-              , href = $link.attr('href');
-            window.location.hash = href;
-            location.reload(true);
-        });
-    };
-
-    IssueView.prototype.load = function(dataUrl, callback) {
+    IssueView.prototype.load = function(callback) {
         var me = this
           , staticDir = this.config.staticDir;
         loadTemplate(staticDir + 'templates/issues.html', 'issues', function(err, localIssuesTemplate) {
@@ -454,19 +212,27 @@ $(function() {
                     return console.log(err);
                 }
                 me.nameCountTemplate = localNameCountTemplate;
-                me.loadPage(dataUrl, function() {
-                    if (me.$filter) {
-                        me.addAfflictionClickHandling();
-                    }
+                me.loadPage(me.issuesUrl, function() {
                     setInterval(function() {
                         me.loadPage("Reloading...");
                     }, me.refreshRate);
+                    if (callback) {
+                        callback();
+                    }
                 });
             });
         });
     };
 
-    IssueView.extractFilterFromHash = extractFilterFrom;
+    IssueView.prototype.setFilterView = function(filterView) {
+        var me = this;
+        filterView.listen(function (filters) {
+            me.render(filterIssues(me.allIssues, filters), filters);
+        });
+    };
+
+    IssueView.extractFilterFrom = extractFilterFrom;
+
     window.IssueView = IssueView;
 
 });

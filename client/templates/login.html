@@ -13,45 +13,13 @@
 
 <div class="header">
     <div class="container-fluid">
-        <!--<div class="row">-->
-            <!--<div class="col-md-12">-->
-                <!--<nav class="navbar navbar-default" role="navigation">-->
-                    <!--<div class="collapse navbar-collapse container-fluid" id="issue-filters">-->
-                        <!--<ul class="nav navbar-nav">-->
-                            <!--<li id="state-filter" class="dropdown name-count"></li>-->
-                            <!--<li id="type-filter" class="dropdown name-count"></li>-->
-                            <!--<li id="milestone-filter" class="dropdown name-count"></li>-->
-                            <!--<li id="repo-filter" class="dropdown name-count"></li>-->
-                            <!--<li id="assignee-filter" class="dropdown name-count"></li>-->
-                            <!--<li id="label-filter" class="dropdown name-count"></li>-->
-
-                            <!--<li>-->
-                                <!--<div class="input-group">-->
-                                    <!--<input id="text-search" type="text" class="form-control" placeholder="filter by text">-->
-                                    <!--<span id="clear-search" class="glyphicon glyphicon-remove input-group-addon"></span>-->
-                                <!--</div>-->
-                                <!--&lt;!&ndash;<form class="navbar-form navbar-left" role="search" id="issue-search">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<div class="form-group">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<input type="text" class="form-control" placeholder="Search">&ndash;&gt;-->
-                                <!--&lt;!&ndash;<span class="input-group-addon">X</span>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</div>&ndash;&gt;-->
-                                <!--&lt;!&ndash;</form>&ndash;&gt;-->
-                            <!--</li>-->
-
-                            <!--<li class="dropdown affliction">-->
-                                <!--<a href="#" class="dropdown-toggle" data-toggle="dropdown">Affliction <span class="caret"></span></a>-->
-                                <!--<ul class="dropdown-menu" role="menu">-->
-                                    <!--<li><a href="">None</a></li>-->
-                                    <!--<li><a href="#affliction=old">Old Issues</a></li>-->
-                                    <!--<li><a href="#affliction=stale">Stale Issues</a></li>-->
-                                <!--</ul>-->
-                            <!--</li>-->
-
-                        <!--</ul>-->
-                    <!--</div>-->
-                <!--</nav>-->
-            <!--</div>-->
-        <!--</div>-->
+        <div class="row">
+            <div class="col-md-12">
+                <nav class="navbar navbar-default" role="navigation">
+                    <div class="collapse navbar-collapse container-fluid" id="issue-filters"></div>
+                </nav>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-12">
@@ -104,6 +72,8 @@
 <script src="{{staticDir}}js/lib/async.js"></script>
 <script src="{{staticDir}}js/lib/moment.min.js"></script>
 <script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
+<script src="{{staticDir}}js/issues.js"></script>
+<script src="{{staticDir}}js/filter.js"></script>
 <script>
     $(function() {
         var $loadingDialog = $('#modal-loading');
@@ -113,26 +83,43 @@
         });
         $.getJSON('{{urlPrefix}}_issues/{{login}}', function(response) {
             var assigned = response.assigned.issues
-              , mentioned = response.mentioned.issues;
+              , mentioned = response.mentioned.issues
+              , allIssues = assigned.concat(mentioned)
+              , filterView
+              , assignedIssuesView
+              , mentionedIssuesView;
 
-            new IssueView({
-                elementId: 'assigned-container'
+            filterView = new FilterView({
+                elementId: 'issue-filters'
               , staticDir: '{{staticDir}}'
-              , urlPrefix: '{{urlPrefix}}'
-              , issues: assigned
-            }).load();
+              , issues: allIssues
+              , showAffliction: false
+            }, function() {
+                assignedIssuesView = new IssueView({
+                    elementId: 'assigned-container'
+                  , staticDir: '{{staticDir}}'
+                  , urlPrefix: '{{urlPrefix}}'
+                  , issues: assigned
+                  , filter: filterView
+                });
+                assignedIssuesView.load();
+                assignedIssuesView.setFilterView(filterView);
 
-            new IssueView({
-                elementId: 'mentioned-container'
-              , staticDir: '{{staticDir}}'
-              , urlPrefix: '{{urlPrefix}}'
-              , issues: mentioned
-            }).load();
-            $loadingDialog.modal('hide');
+                mentionedIssuesView = new IssueView({
+                    elementId: 'mentioned-container'
+                    , staticDir: '{{staticDir}}'
+                    , urlPrefix: '{{urlPrefix}}'
+                    , issues: mentioned
+                    , filter: filterView
+                });
+                mentionedIssuesView.load();
+                mentionedIssuesView.setFilterView(filterView);
+
+                $loadingDialog.modal('hide');
+            });
         });
     });
 </script>
-<script src="{{staticDir}}js/issues.js"></script>
 
 </body>
 </html>
