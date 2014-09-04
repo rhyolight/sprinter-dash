@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.14
+
+* Bugfix: text search was not respected across filters.
+
 ## 0.1.13
 
 * Refactored out FilterView class: https://github.com/rhyolight/sprinter-dash/issues/7

@@ -235,6 +235,8 @@ $(function() {
             , lastKeyPress = undefined;
         function getLocalFilter(event, filterType) {
             var filter = extractFilterFrom(window.location.hash);
+            // Make sure the text filter is applied.
+            filter.text = me.$textSearchField.val();
             filter[filterType] = $(event.currentTarget).data('name');
             return filter;
         }
@@ -248,7 +250,7 @@ $(function() {
         me.$clearSearch.click(function() {
             me.$textSearchField.val('');
             var filter = extractFilterFrom(window.location.hash);
-            filter.text = ''
+            filter.text = '';
             me.fireFilterChange(filter);
         });
         me.$textSearchField.on('keyup', function() {
@@ -273,6 +275,7 @@ $(function() {
     };
 
     FilterView.prototype.updateFilterLinks = function(filter) {
+        // Highlight selections in dropdown filters.
         _.each(this.filterElements, function($filterElement, filterType) {
             // Remove any selections on current filter triggers
             $filterElement.find('ul li').removeClass('active');
@@ -301,6 +304,7 @@ $(function() {
     };
 
     FilterView.prototype.fireFilterChange = function(filter) {
+        this.updateFilterLinks(filter);
         _.each(this.listeners, function(callback) {
             callback(filter);
         });
@@ -322,6 +326,10 @@ $(function() {
         renderTemplate(this.filterElements.type, nameCountTemplate, types);
         renderTemplate(this.filterElements.state, nameCountTemplate, states);
         renderTemplate(this.filterElements.label, nameCountTemplate, labels);
+        // If the filter contains a text field, update the text search input
+        if (filter.text) {
+            this.$textSearchField.val(filter.text);
+        }
         this.addFilterClickHandling();
         this.updateFilterLinks(filter);
     };
