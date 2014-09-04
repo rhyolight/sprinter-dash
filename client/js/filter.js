@@ -12,6 +12,8 @@ $(function() {
         });
     }
 
+    // This function is copied in issues.js, too.
+    // TODO: abstract into one place.
     function extractFilterFrom(hash) {
         var params = {milestone: 'all', repo: 'all', assignee: 'all', type: 'all', state: 'open'}
             , temp
@@ -194,13 +196,13 @@ $(function() {
     }
 
     function FilterView(cfg, callback) {
-        var me = this
-          , showAffliction = true;
+        var me = this;
         if (cfg.issues) {
             me.issues = cfg.issues;
         }
+        me.showAffliction = false;
         if (cfg.showAffliction != undefined) {
-            showAffliction = Boolean(cfg.showAffliction);
+            me.showAffliction = Boolean(cfg.showAffliction);
         }
         me.listeners = [];
         loadTemplate(cfg.staticDir + 'templates/filter.html', 'filter', function(err, filterTemplate) {
@@ -208,7 +210,7 @@ $(function() {
                 me.nameCountTemplate = nameCountTemplate;
                 me.$filter = $('#' + cfg.elementId);
                 renderTemplate(me.$filter, filterTemplate, {
-                    showAffliction: showAffliction
+                    showAffliction: me.showAffliction
                 });
                 me.filterElements = {
                     assignee: me.$filter.find('#assignee-filter'),
@@ -262,6 +264,12 @@ $(function() {
             }, 200);
             lastKeyPress = timePressed;
         });
+        if (me.showAffliction) {
+            me.$filter.find('li.affliction ul li a').click(function() {
+                window.location.hash = $(this).attr('href');
+                location.reload(true);
+            });
+        }
     };
 
     FilterView.prototype.updateFilterLinks = function(filter) {

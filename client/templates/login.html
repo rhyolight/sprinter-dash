@@ -85,7 +85,9 @@
             var assigned = response.assigned.issues
               , mentioned = response.mentioned.issues
               , allIssues = assigned.concat(mentioned)
-              , filterView;
+              , filterView
+              , assignedIssuesView
+              , mentionedIssuesView;
 
             filterView = new FilterView({
                 elementId: 'issue-filters'
@@ -93,24 +95,26 @@
               , issues: allIssues
               , showAffliction: false
             }, function() {
-                filterView.listen(function(updatedFilter) {
-                    console.log(updatedFilter);
+                assignedIssuesView = new IssueView({
+                    elementId: 'assigned-container'
+                  , staticDir: '{{staticDir}}'
+                  , urlPrefix: '{{urlPrefix}}'
+                  , issues: assigned
+                  , filter: filterView
                 });
-//                new IssueView({
-//                    elementId: 'assigned-container'
-//                    , staticDir: '{{staticDir}}'
-//                    , urlPrefix: '{{urlPrefix}}'
-//                    , issues: assigned
-//                    , filter: filterView
-//                }).load();
-//
-//                new IssueView({
-//                    elementId: 'mentioned-container'
-//                    , staticDir: '{{staticDir}}'
-//                    , urlPrefix: '{{urlPrefix}}'
-//                    , issues: mentioned
-//                    , filter: filterView
-//                }).load();
+                assignedIssuesView.load();
+                assignedIssuesView.setFilterView(filterView);
+
+                mentionedIssuesView = new IssueView({
+                    elementId: 'mentioned-container'
+                    , staticDir: '{{staticDir}}'
+                    , urlPrefix: '{{urlPrefix}}'
+                    , issues: mentioned
+                    , filter: filterView
+                });
+                mentionedIssuesView.load();
+                mentionedIssuesView.setFilterView(filterView);
+
                 $loadingDialog.modal('hide');
             });
         });

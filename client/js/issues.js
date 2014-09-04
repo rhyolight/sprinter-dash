@@ -6,6 +6,23 @@ $(function() {
         return haystack.indexOf(needle, haystack.length - needle.length) !== -1;
     }
 
+    function extractFilterFrom(hash) {
+        var params = {milestone: 'all', repo: 'all', assignee: 'all', type: 'all', state: 'open'}
+            , temp
+            , items = hash.slice(1).split("&") // remove leading # and split
+            , i;
+        for (i = 0; i < items.length; i++) {
+            temp = items[i].split("=");
+            if (temp[0]) {
+                if (temp.length < 2) {
+                    temp.push("");
+                }
+                params[decodeURIComponent(temp[0])] = decodeURIComponent(temp[1]);
+            }
+        }
+        return params;
+    }
+
     function loadTemplate(src, id, callback) {
         $.ajax({
             url: src,
@@ -52,12 +69,8 @@ $(function() {
         if (this.refreshRate == undefined) {
             this.refreshRate = DEFAULT_REFRESH_RATE;
         }
-        if (cfg.filterId) {
-            this.filterView = new FilterView({
-                elementId: cfg.filterId
-            });
-        }
         this.$loadingDialog = $('#modal-loading');
+        return this;
     }
 
     IssueView.prototype.filterIssuesByText = function(text) {
@@ -134,27 +147,13 @@ $(function() {
     }
 
     IssueView.prototype.render = function(issues, filter) {
-        var issuesData = convertIssuesToTemplateData(issues, this.config.staticDir, this.config.urlPrefix)
-          , assignees = extractIssueAssignees(issues)
-          , repos = extractIssueRepos(issues)
-          , milestones = extractIssueMilestones(issues)
-          , types = extractIssueTypes(issues)
-          , states = extractIssueStates(issues)
-          , labels = extractIssueLabels(issues)
-          , nameCountTemplate = this.nameCountTemplate
-          ;
+        var issuesData = convertIssuesToTemplateData(
+           issues, this.config.staticDir, this.config.urlPrefix
+        );
         renderTemplate(this.$issues, this.issuesTemplate, issuesData);
         if (this.$filter) {
             // Now that issues are rendered, stash them for filtering.
             this.$issueItems = this.$issues.find('tr.issue');
-            renderTemplate(this.filterElements.assignee, nameCountTemplate, assignees);
-            renderTemplate(this.filterElements.repo, nameCountTemplate, repos);
-            renderTemplate(this.filterElements.milestone, nameCountTemplate, milestones);
-            renderTemplate(this.filterElements.type, nameCountTemplate, types);
-            renderTemplate(this.filterElements.state, nameCountTemplate, states);
-            renderTemplate(this.filterElements.label, nameCountTemplate, labels);
-            this.addFilterClickHandling();
-            this.updateFilterLinks(filter);
         }
     };
 
@@ -171,8 +170,7 @@ $(function() {
 
     IssueView.prototype.loadPage = function(issuesUrl, callback) {
         var me = this
-          , filter = extractFilterFrom(window.location.hash)
-          , issuesUrl = this.issuesUrl;
+          , filter = extractFilterFrom(window.location.hash);
         function handleIssues(issues, cb) {
             // Keep this as the master copy to start fresh when filters are applied.
             me.allIssues = issues;
@@ -186,6 +184,14 @@ $(function() {
             me.showLoading(true);
             $.getJSON(issuesUrl, function(response) {
                 handleIssues(response.issues);
+                if (me.config.filterId) {
+                    me.setFilterView(new FilterView({
+                        elementId: 'issue-filters'
+                      , staticDir: me.config.staticDir
+                      , issues: response.issues
+                      , showAffliction: true
+                    }));
+                }
                 me.showLoading(false);
             });
         } else {
@@ -193,16 +199,7 @@ $(function() {
         }
     };
 
-    IssueView.prototype.addAfflictionClickHandling = function() {
-        this.$filter.find('li.affliction ul li a').click(function() {
-            var $link = $(this)
-              , href = $link.attr('href');
-            window.location.hash = href;
-            location.reload(true);
-        });
-    };
-
-    IssueView.prototype.load = function(dataUrl, callback) {
+    IssueView.prototype.load = function(callback) {
         var me = this
           , staticDir = this.config.staticDir;
         loadTemplate(staticDir + 'templates/issues.html', 'issues', function(err, localIssuesTemplate) {
@@ -215,17 +212,26 @@ $(function() {
                     return console.log(err);
                 }
                 me.nameCountTemplate = localNameCountTemplate;
-                me.loadPage(dataUrl, function() {
-                    if (me.$filter) {
-                        me.addAfflictionClickHandling();
-                    }
+                me.loadPage(me.issuesUrl, function() {
                     setInterval(function() {
                         me.loadPage("Reloading...");
                     }, me.refreshRate);
+                    if (callback) {
+                        callback();
+                    }
                 });
             });
         });
     };
+
+    IssueView.prototype.setFilterView = function(filterView) {
+        var me = this;
+        filterView.listen(function (filters) {
+            me.render(filterIssues(me.allIssues, filters), filters);
+        });
+    };
+
+    IssueView.extractFilterFrom = extractFilterFrom;
 
     window.IssueView = IssueView;
 

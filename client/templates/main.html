@@ -60,7 +60,7 @@
 
 <script>
     $(function() {
-        var affliction = IssueView.extractFilterFromHash(window.location.hash).affliction;
+        var affliction = IssueView.extractFilterFrom(window.location.hash).affliction;
         var dataUrl = '{{urlPrefix}}_issues';
         if (affliction) {
             if (affliction == 'old') {
