@@ -93,6 +93,7 @@ $(function() {
     }
 
     function filterIssues(issues, filter) {
+//        console.log(filter);
         // Replace + with space.
         _.each(filter, function(val, key) {
             filter[key] = val.replace('+', ' ');
@@ -101,6 +102,9 @@ $(function() {
         var filteredIssues = $.extend(true, {}, issues);
         filteredIssues = _.filter(filteredIssues, function(issue) {
             var labelNames = _.map(issue.labels, function(label) { return label.name; });
+            if (filter.text && (issue.title.toLowerCase().indexOf(filter.text.toLowerCase()) == -1)) {
+                return false;
+            }
             if (filter.milestone
                 && filter.milestone !== 'all'
                 && (issue.milestone == undefined || filter.milestone !== issue.milestone.title)) {
@@ -224,10 +228,20 @@ $(function() {
         });
     };
 
+    IssueView.prototype._filterDiffers = function(filters) {
+        if (! this.currentFilters) {
+            return true;
+        }
+        return JSON.stringify(this.currentFilters) != JSON.stringify(filters);
+    };
+
     IssueView.prototype.setFilterView = function(filterView) {
         var me = this;
-        filterView.listen(function (filters) {
-            me.render(filterIssues(me.allIssues, filters), filters);
+        filterView.listen(function (filter) {
+            if (me._filterDiffers(filter)) {
+                me.currentFilters = filter;
+                me.render(filterIssues(me.allIssues, filter), filter);
+            }
         });
     };
 
