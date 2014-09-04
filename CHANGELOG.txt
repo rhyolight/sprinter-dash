@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.15
+
+* Bugfix: bad URL to login issue view.
+
 ## 0.1.14
 
 * Bugfix: text search was not respected across filters.

@@ -107,7 +107,7 @@
             {{/each}}
         </td>
         <td class="author">
-            <a href="{{../../staticDir}}issues/{{user.login}}" target="_blank">
+            <a href="{{../urlPrefix}}issues/{{user.login}}" target="_blank">
                 <img src="{{user.avatar_url}}" title="created by {{user.login}}"/>
             </a>
         </td>
@@ -120,7 +120,7 @@
         </td>
         <td class="updated">updated<br/><span class="nowrap">{{updated}}</span></td>
         <td class="user">
-            <a href="{{../../staticDir}}issues/{{assignee.login}}" target="_blank">
+            <a href="{{../urlPrefix}}issues/{{assignee.login}}" target="_blank">
                 <img src="{{assignee.avatar_url}}" title="assigned to {{assignee.login}}"/>
             </a>
         </td>

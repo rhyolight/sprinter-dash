@@ -73,27 +73,12 @@ $(function() {
         return this;
     }
 
-    IssueView.prototype.filterIssuesByText = function(text) {
-        this.$issueItems.show();
-        if (! text) {
-            return;
-        }
-        this.$issueItems.each(function() {
-            var $issue = $(this)
-                , title = $issue.find('td.title a').html();
-            if (title.toLowerCase().indexOf(text.toLowerCase()) == -1) {
-                $issue.hide();
-            }
-        });
-    };
-
     function renderTemplate($element, templateName, data) {
         var template = Handlebars.compile($('#' + templateName).html());
         $element.html(template(data));
     }
 
     function filterIssues(issues, filter) {
-//        console.log(filter);
         // Replace + with space.
         _.each(filter, function(val, key) {
             filter[key] = val.replace('+', ' ');
