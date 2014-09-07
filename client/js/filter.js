@@ -160,7 +160,7 @@ $(function() {
         });
         return {
             items: milestonesOut
-            , title: 'Sprints'
+            , title: 'Milestones'
             , type: 'milestone'
         };
     }
