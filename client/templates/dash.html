@@ -24,16 +24,137 @@
         href="https://github.com/rhyolight/travis-foreman" target="_blank">travis-foreman</a>.
 </div>
 
-<ul>
-    <li><a href="issues">issues</a></li>
-</ul>
+<br/>
+
+<div class="container">
+
+
+    <div class="row">
+        <div class="col-lg-3">
+            <a href="issues">All Issues Past Two Months</a>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-lg-2">
+            By assignee:
+        </div>
+        <div class="col-lg-4">
+            <div id="by-assignee" class="input-group">
+                <input type="text" class="form-control" placeholder="GitHub username">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-lg-2">
+            User mentioned:
+        </div>
+        <div class="col-lg-4">
+            <div id="by-mentioned" class="input-group">
+                <input type="text" class="form-control" placeholder="GitHub username">
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="button">Go!</button>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-lg-2">
+            By milestone:
+        </div>
+        <div class="col-lg-4">
+            <div id="by-milestone" class="input-group">
+                <input type="text" class="form-control" placeholder="Milestone Name">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-lg-2">
+            By label(s):
+        </div>
+        <div class="col-lg-4">
+            <div id="by-labels" class="input-group">
+                <input type="text" class="form-control" placeholder="label1,label2">
+                    <span class="input-group-btn">
+                        <button class="btn btn-default" type="button">Go!</button>
+                    </span>
+            </div>
+        </div>
+    </div>
+
+    <br/>
+
+    <div class="row">
+        <div class="col-lg-2">
+            Updated since:
+        </div>
+
+        <div class="col-lg-4">
+            <div class="form-group">
+                <div class='input-group date' id='by-since'>
+                    <input type='text' class="form-control" data-date-format="YYYY-MM-DDTHH:MM:SSZ"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">Go!</button>
+                        </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
 
 <script src="http://code.jquery.com/jquery.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
 <script src="http://builds.handlebarsjs.com.s3.amazonaws.com/handlebars-v1.1.2.js"></script>
 <script src="{{staticDir}}js/lib/async.js"></script>
-<script src="{{staticDir}}js/lib/moment.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
+<script src="{{staticDir}}bootstrap/js/bootstrap-datetimepicker.js"></script>
+
+<script>
+    $(function() {
+
+        $('#by-since').datetimepicker({
+            pickTime: true
+        });
+
+        _.each(['assignee', 'mentioned', 'milestone', 'labels', 'since'], function(type) {
+            var $by = $('#by-' + type)
+                    , $byInput = $by.find('input')
+                    , $byButton = $by.find('span button');
+            $byButton.click(function() {
+                var inputValue = $byInput.val();
+                if (type == 'assignee') {
+                    window.location = '{{urlPrefix}}issues/' + inputValue;
+                } else {
+                    window.location = '{{urlPrefix}}search/' + type + '/' + inputValue;
+                }
+            });
+        });
+
+    });
+</script>
 
 </body>
 </html>
