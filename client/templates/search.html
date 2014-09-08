@@ -60,21 +60,12 @@
 
 <script>
     $(function() {
-        var affliction = IssueView.extractFilterFrom(window.location.hash).affliction;
-        var dataUrl = '{{urlPrefix}}_issues';
-        if (affliction) {
-            if (affliction == 'old') {
-                dataUrl = '{{urlPrefix}}_oldIssues';
-            } else if (affliction == 'stale') {
-                dataUrl = '{{urlPrefix}}_staleIssues';
-            }
-        }
         new IssueView({
             elementId: 'issues-container'
-          , filterId: 'issue-filters'
-          , staticDir: '{{staticDir}}'
-          , urlPrefix: '{{urlPrefix}}'
-          , issuesUrl: dataUrl
+            , filterId: 'issue-filters'
+            , staticDir: '{{staticDir}}'
+            , urlPrefix: '{{urlPrefix}}'
+            , issuesUrl: '{{dataUrl}}'
         }).load();
     });
 </script>

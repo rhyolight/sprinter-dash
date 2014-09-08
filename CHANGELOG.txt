@@ -2,7 +2,9 @@
 
 ## 0.1.17
 
-* Change 'Sprints' filter to 'Milestones'.
+* Changed 'Sprints' filter to 'Milestones'.
+* Added generic search URL routes and data handling function.
+* Updated main dash page with examples.
 
 ## 0.1.16
 
