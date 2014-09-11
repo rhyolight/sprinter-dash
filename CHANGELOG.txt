@@ -6,6 +6,10 @@
 * Added generic search URL routes and data handling function.
 * Updated main dash page with examples.
 
+## 0.1.18
+
+* Adding back closed issues to default 2 month view: https://github.com/rhyolight/sprinter-dash/issues/14
+
 ## 0.1.16
 
 * Added priority view.
