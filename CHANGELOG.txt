@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.20
+
+* Using repo type to filter which repos are used in road map.
+
 ## 0.1.19
 
 * Added /roadmap
