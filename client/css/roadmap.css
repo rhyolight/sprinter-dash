@@ -1,3 +1,22 @@
+body {
+    font-size: 12pt;
+    background-color: #E5E8F5;
+}
+
+h2 {
+    font-size: 26pt;
+    font-weight: bold;
+}
+h3 {
+    margin-top: 30px;
+    margin-bottom: 20px;
+    font-size: 20pt;
+    text-decoration: underline;
+}
+h4 {
+    font-size: 16pt;
+}
+
 .issue-meta-section {
     margin-right: 10px;
 }
@@ -48,22 +67,24 @@
 }
 
 .milestone {
-    margin: 10px 100px;
+    margin: 10px 100px 20px;
     border: solid 1px #333;
-    border-radius: 2px;
+    border-radius: 4px;
     padding: 10px;
+    background-color: #FFF;
 }
 
 .issue .header {
     width: 80%;
 }
 
-.issue h3 img {
+.issue h4 img {
     width: 40px;
     border: 1px solid #333;
     border-radius: 3px;
 }
 
-.milestone p {
-    font-size: 14pt;
+.milestone .description p {
+    font-size: 16pt;
+    margin-left: 20px;
 }

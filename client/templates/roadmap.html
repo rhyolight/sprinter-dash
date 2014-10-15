@@ -22,8 +22,7 @@
 </div>
 
 <div id="powered-by">
-    Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a> & <a
-        href="https://github.com/rhyolight/travis-foreman" target="_blank">travis-foreman</a>.
+    Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a>.
 </div>
 
 <div class="modal fade" id="modal-loading" tabindex="-1" role="dialog">
@@ -42,7 +41,7 @@
 <div id="roadmap-container">
     {{#each milestones}}
         <div class="milestone">
-            <h2>{{title}}</h2>
+            <h2><a href="issues#milestone={{title}}" target="_blank" title="click to see all {{title}} issues">{{title}}</a></h2>
             <div class="progress">
                 <span class="issue-meta-section task-progress">
                     <span class="octicon octicon-checklist"></span>
@@ -52,14 +51,19 @@
                     </span>
                 </span>
             </div>
-            {{{html_description}}}
+
+            <div class="description">
+                {{{html_description}}}
+            </div>
+
+            <h3>{{title}} Initiatives</h3>
             <ul>
             {{#each issues}}
                 <li class="issue">
-                    <h3>
+                    <h4>
                         <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
                         <a href="{{html_url}}" target="_blank">{{title}}</a>
-                    </h3>
+                    </h4>
                     <div class="progress">
                         <span class="issue-meta-section task-progress">
                             <span class="octicon octicon-checklist"></span>
@@ -83,7 +87,6 @@
 <script src="{{staticDir}}js/lib/async.js"></script>
 <script src="http://cdnjs.cloudflare.com/ajax/libs/moment.js/2.8.2/moment.min.js"></script>
 <script src="{{staticDir}}bootstrap/js/bootstrap.min.js"></script>
-<!-- <script src="{{staticDir}}js/roadmap.js"></script> -->
 <script>
     $(function() {
     });
