@@ -19,6 +19,7 @@
     "express": "3.4.7",
     "handlebars": "^2.0.0-alpha.4",
     "lodash": "^2.4.1",
+    "marked": "^0.3.2",
     "moment": "^2.8.2",
     "sprinter": "^0.1.15",
     "travis-foreman": "0.0.3"
