@@ -1,6 +1,6 @@
 body {
     font-size: 12pt;
-    background-color: #E5E8F5;
+    background-color: lightblue;
 }
 
 h2 {
@@ -22,6 +22,9 @@ h4 {
     top: 10px;
     right: 10px;
     font-size: 12pt;
+}
+#detail-filter ul li {
+    list-style: none;
 }
 
 .issue-meta-section {
@@ -73,12 +76,27 @@ h4 {
     background-image: none;
 }
 
-.milestone {
+table.milestone {
     margin: 10px 100px 20px;
     border: solid 1px #333;
     border-radius: 4px;
-    padding: 10px;
     background-color: #FFF;
+}
+table.milestone td {
+    padding: 0 20px;
+}
+
+table.milestone tr.issues > td > table > tbody > tr.issue > td {
+    border-top: solid black 1px;
+    padding: 10px;
+}
+
+table.milestone tr.issues > td > table > tbody > tr.issue:first-child > td {
+    border-top: none;
+}
+
+table.milestone tr.issues > td > table {
+    width: 100%;
 }
 
 .issue .header {

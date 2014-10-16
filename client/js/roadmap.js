@@ -50,12 +50,15 @@ $(function() {
         return params;
     }
 
-    function removeDetail(detailLevel, data) {
+    function refineData(detailLevel, data) {
         // We start with the most detail, so if we want it all we leave it alone.
         if (detailLevel == 2) {
             return;
         }
         _.each(data.milestones, function(milestone) {
+            if (milestone.due_on) {
+                milestone.due_on = moment(milestone.due_on).format("MMM Do YYYY");
+            }
             _.each(milestone.issues, function(issue) {
                 var body = issue.html_body;
                 if (detailLevel == 0) {
@@ -88,7 +91,7 @@ $(function() {
     loadTemplate(roadmapTemplateUrl, 'roadmap', function(err, roadmapTemplate) {
         $.getJSON(roadmapDataUrl + window.location.search, function(response) {
             dataLoaded = true;
-            removeDetail(detail, response);
+            refineData(detail, response);
             renderTemplate($roadMap, roadmapTemplate, response);
             $loadingDialog.modal('hide');
         });

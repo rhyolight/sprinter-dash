@@ -1,7 +1,21 @@
+
 {{#each milestones}}
-    <div class="milestone">
-        <h2><a href="issues#milestone={{title}}" target="_blank" title="click to see all {{title}} issues">{{title}}</a></h2>
-        <div class="progress">
+<table class="milestone">
+<tbody>
+
+    <tr class="header">
+        
+        <td>
+            <h2><a href="issues#milestone={{title}}" target="_blank" title="click to see all {{title}} issues">{{title}}</a></h2>
+        </td>
+        
+        <td class="due">
+            {{#if due_on}}
+                <h3>Due: {{due_on}}</h3>
+            {{/if}}
+        </td>
+
+        <td class="progress">
             <span class="issue-meta-section task-progress">
                 <span class="octicon octicon-checklist"></span>
                 <span class="task-progress-counts">{{tasksComplete}} of {{tasksTotal}}</span>
@@ -9,32 +23,63 @@
                     <span class="progress" style="width: {{percentageDone}}%"></span>
                 </span>
             </span>
-        </div>
+        </td>
 
-        <div class="description">
-            {{{html_description}}}
-        </div>
+    </tr>
 
-        <h3>{{title}} Initiatives</h3>
-        <ul>
-        {{#each issues}}
-            <li class="issue">
-                <h4>
-                    <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
-                    <a href="{{html_url}}" target="_blank">{{title}}</a>
-                </h4>
-                <div class="progress">
-                    <span class="issue-meta-section task-progress">
-                        <span class="octicon octicon-checklist"></span>
-                        <span class="task-progress-counts">{{tasksComplete}} of {{tasksTotal}}</span>
-                        <span class="progress-bar">
-                            <span class="progress" style="width: {{percentageDone}}%"></span>
+    <tr class="description">
+        <td colspan="3">
+            <div class="description">
+                {{{html_description}}}
+            </div>
+        </td>
+    </tr>
+
+    <tr class="initiatives">
+        <td colspan="3">
+            <h3>Initiatives</h3>
+        </td>
+    </tr>
+
+    <tr class="issues">
+
+        <td colspan="3">
+
+            <table>
+            <tbody>
+            {{#each issues}}
+                <tr class="issue">
+                    <td>
+                    <h4>
+                        <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
+                        <a href="{{html_url}}" target="_blank">{{title}}</a>
+                    </h4>
+                    </td>
+                    <td>
+                    <div class="progress">
+                        <span class="issue-meta-section task-progress">
+                            <span class="octicon octicon-checklist"></span>
+                            <span class="task-progress-counts">{{tasksComplete}} of {{tasksTotal}}</span>
+                            <span class="progress-bar">
+                                <span class="progress" style="width: {{percentageDone}}%"></span>
+                            </span>
                         </span>
-                    </span>
-                </div>
-                <p>{{{html_body}}}</p>
-            </li>
-        {{/each}}
-        </ul>
-    </div>
+                    </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="issue-body" colspan="2">
+                    {{{html_body}}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+            </table>
+
+        </td>
+
+    </tr>
+
+</tbody>
+</table>
 {{/each}}

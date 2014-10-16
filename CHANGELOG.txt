@@ -2,6 +2,11 @@
 
 ## 0.1.22
 
+* Style updates
+* Added milestone due_on.
+
+## 0.1.22
+
 * Updated to client-side rendering of road map. 
 * Sprinter version bump to get better caching.
 
