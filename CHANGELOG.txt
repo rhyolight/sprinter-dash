@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.1.22
+
+* Updated to client-side rendering of road map. 
+* Sprinter version bump to get better caching.
+
 ## 0.1.21
 
 * Style changes for road map, removed logs.

@@ -1,6 +1,6 @@
 {
   "name": "sprinter-dash",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "GitHub Issues Dashboard for multiple repositories.",
   "author": "Matthew Taylor <matt@numenta.org>",
   "main": "lib/dash.js",
@@ -21,7 +21,7 @@
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
     "moment": "^2.8.2",
-    "sprinter": "^0.1.18",
+    "sprinter": "^0.1.19",
     "travis-foreman": "0.0.3"
   },
   "engines": {

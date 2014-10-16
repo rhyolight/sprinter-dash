@@ -25,6 +25,15 @@
     Powered by <a href="https://github.com/rhyolight/sprinter.js" target="_blank">sprinter</a>.
 </div>
 
+<div id="detail-filter">
+    <ul>
+        <li><a href="#detail=0">less detail</a></li>
+        <li><a href="">normal</a></li>
+        <li><a href="#detail=2">more detail</a></li>
+    </ul>
+</div>
+
+
 <div class="modal fade" id="modal-loading" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -49,6 +58,11 @@
 <script>
     window.staticDir = '{{staticDir}}';
     window.urlPrefix = '{{urlPrefix}}';
+    $(function() {
+        $('#detail-filter ul li a').click(function() {
+            window.location.reload();
+        });
+    });
 </script>
 <script src="{{staticDir}}js/roadmap.js"></script>
 
