@@ -1,0 +1,40 @@
+{{#each milestones}}
+    <div class="milestone">
+        <h2><a href="issues#milestone={{title}}" target="_blank" title="click to see all {{title}} issues">{{title}}</a></h2>
+        <div class="progress">
+            <span class="issue-meta-section task-progress">
+                <span class="octicon octicon-checklist"></span>
+                <span class="task-progress-counts">{{tasksComplete}} of {{tasksTotal}}</span>
+                <span class="progress-bar">
+                    <span class="progress" style="width: {{percentageDone}}%"></span>
+                </span>
+            </span>
+        </div>
+
+        <div class="description">
+            {{{html_description}}}
+        </div>
+
+        <h3>{{title}} Initiatives</h3>
+        <ul>
+        {{#each issues}}
+            <li class="issue">
+                <h4>
+                    <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
+                    <a href="{{html_url}}" target="_blank">{{title}}</a>
+                </h4>
+                <div class="progress">
+                    <span class="issue-meta-section task-progress">
+                        <span class="octicon octicon-checklist"></span>
+                        <span class="task-progress-counts">{{tasksComplete}} of {{tasksTotal}}</span>
+                        <span class="progress-bar">
+                            <span class="progress" style="width: {{percentageDone}}%"></span>
+                        </span>
+                    </span>
+                </div>
+                <p>{{{html_body}}}</p>
+            </li>
+        {{/each}}
+        </ul>
+    </div>
+{{/each}}

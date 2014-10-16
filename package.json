@@ -21,7 +21,7 @@
     "lodash": "^2.4.1",
     "marked": "^0.3.2",
     "moment": "^2.8.2",
-    "sprinter": "^0.1.15",
+    "sprinter": "^0.1.18",
     "travis-foreman": "0.0.3"
   },
   "engines": {
