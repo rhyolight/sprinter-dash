@@ -86,27 +86,43 @@ table.milestone td {
     padding: 0 20px;
 }
 
-table.milestone tr.issues > td > table > tbody > tr.issue > td {
+table.milestone tr.super-issues > td > table > tbody > tr.issue > td {
     border-top: solid black 1px;
     padding: 10px;
 }
 
-table.milestone tr.issues > td > table > tbody > tr.issue:first-child > td {
+table.milestone tr.super-issues > td > table > tbody > tr.issue:first-child > td {
     border-top: none;
 }
 
-table.milestone tr.issues > td > table {
+table.milestone tr.super-issues > td > table {
     width: 100%;
+}
+table.milestone tr.stand-alone > td > table {
+    margin-bottom: 20px;
+}
+
+table.milestone tr.stand-alone td.title {
+    font-size: larger;
+}
+
+td.labels span {
+    white-space: nowrap;
+    border-radius: 3px;
+    padding: 0 2px;
 }
 
 .issue .header {
     width: 80%;
 }
 
-.issue h4 img {
+.issue h4 img, td.avatar img {
     width: 40px;
     border: 1px solid #333;
     border-radius: 3px;
+}
+td.avatar img {
+    width: 26px;
 }
 
 .milestone .description p {

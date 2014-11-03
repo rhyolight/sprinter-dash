@@ -59,8 +59,7 @@ $(function() {
             if (milestone.due_on) {
                 milestone.due_on = moment(milestone.due_on).format("MMM Do YYYY");
             }
-            _.each(milestone.issues, function(issue) {
-                var body = issue.html_body;
+            _.each(milestone.superIssues, function(issue) {
                 if (detailLevel == 0) {
                     // Remove the entire body.
                     issue.html_body = '';
@@ -69,6 +68,16 @@ $(function() {
                     issue.html_body = issue.html_body.split('<hr>')[0]
                 }
             });
+            // Don't show stand-alone issues for low detail.
+            if (detailLevel == 0) {
+                milestone.standAloneIssues = undefined;
+            } else {
+                _.each(milestone.standAloneIssues, function(issue) {
+                    issue.labels = _.filter(issue.labels, function(label) {
+                        return label.name !== 'stand-alone';
+                    });
+                });
+            }
         });
     }
 
@@ -92,6 +101,7 @@ $(function() {
         $.getJSON(roadmapDataUrl + window.location.search, function(response) {
             dataLoaded = true;
             refineData(detail, response);
+            response.staticDir = window.staticDir;
             renderTemplate($roadMap, roadmapTemplate, response);
             $loadingDialog.modal('hide');
         });

@@ -37,17 +37,18 @@
 
     <tr class="initiatives">
         <td colspan="3">
-            <h3>Initiatives</h3>
+            <h3>Major Initiatives</h3>
+            <p>These are super issues that require many sub-tasks to be completed before they are achieved.</p>
         </td>
     </tr>
 
-    <tr class="issues">
+    <tr class="super-issues">
 
         <td colspan="3">
 
             <table>
             <tbody>
-            {{#each issues}}
+            {{#each superIssues}}
                 <tr class="issue">
                     <td>
                     <h4>
@@ -79,6 +80,47 @@
         </td>
 
     </tr>
+
+    {{#if standAloneIssues}}
+    <tr>
+        <td colspan="3">
+            <h3>Remaining Stand-Alone {{title}} Issues</h3>
+            <p>These issues are not a part of the major initiatives show above. They are smaller tasks that can be completed or fixed individually.</p>
+        </td>
+    </tr>
+
+    <tr class="stand-alone">
+        <td colspan="3">
+            <table>
+            <tbody>
+            {{#each standAloneIssues}}
+                <tr class="issue">
+                    <td>
+                        <a href="{{html_url}}">{{repo}}#{{number}}</a>
+                    </td>
+                    <td class="title">
+                        {{title}}
+                    </td>
+                    <td class="avatar">
+                        {{#if assignee}}
+                            <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
+                        {{else}}
+                            <img src="{{../../../../staticDir}}/images/unassigned.png">
+                        {{/if}}
+                    </td>
+                    <td class="labels">
+                        {{#each labels}}
+                        <span style="background-color:#{{color}}">{{name}}</span>
+                        {{/each}}
+                    </td>
+                </tr>
+            {{/each}}
+            </tbody>
+            </table>
+        </td>
+    </tr>
+    {{/if}}
+
 
 </tbody>
 </table>
