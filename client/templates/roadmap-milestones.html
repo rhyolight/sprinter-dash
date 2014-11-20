@@ -49,7 +49,7 @@
             <table>
             <tbody>
             {{#each superIssues}}
-                <tr class="issue">
+                <tr class="issue {{state}}">
                     <td>
                     <h4>
                         <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
@@ -69,7 +69,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td class="issue-body" colspan="2">
+                    <td class="issue-body {{state}}" colspan="2">
                     {{{html_body}}}
                     </td>
                 </tr>
@@ -94,7 +94,7 @@
             <table>
             <tbody>
             {{#each standAloneIssues}}
-                <tr class="issue">
+                <tr class="issue {{state}}">
                     <td>
                         <a href="{{html_url}}">{{repo}}#{{number}}</a>
                     </td>

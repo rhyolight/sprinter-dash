@@ -115,6 +115,23 @@ td.labels span {
 .issue .header {
     width: 80%;
 }
+.issue.closed .progress {
+    display: none;
+}
+.issue.closed h4,
+.issue.closed h4 a,
+.issue.closed h4 a:visited
+.issue.closed td a,
+.issue.closed td a:visited,
+.issue.closed td.title {
+    text-decoration: line-through;
+    color: lightgray;
+}
+.issue-body.closed,
+.issue-body.closed a,
+.issue-body.closed a:visited {
+    color: lightgray;
+}
 
 .issue h4 img, td.avatar img {
     width: 40px;
