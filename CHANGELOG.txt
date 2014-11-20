@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.26
+
+* Using new sprinter {state:'all'} issue filter.
+
 ## 0.1.25
 
 * Sprinter version bump.
