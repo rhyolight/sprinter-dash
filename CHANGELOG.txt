@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.0
+
+* Updated road map to show closed issues.
+
 ## 0.1.26
 
 * Using new sprinter {state:'all'} issue filter.
