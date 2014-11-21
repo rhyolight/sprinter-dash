@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.1
+
+* Showing percent done on roadmap super issues.
+
 ## 1.0.0
 
 * Updated road map to show closed issues.
