@@ -52,7 +52,13 @@
                 <tr class="issue {{state}}">
                     <td>
                     <h4>
-                        <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
+                        {{#if assignee}}
+                            <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}">
+                                <img src="{{assignee.avatar_url}}" alt="assigned to {{assignee.login}}"/>
+                            </a>
+                            {{else}}
+                            <img src="{{../../../staticDir}}/images/unassigned.png">
+                        {{/if}}
                         <a href="{{html_url}}" target="_blank">{{title}}</a>
                     </h4>
                     </td>
@@ -103,7 +109,7 @@
                     </td>
                     <td class="avatar">
                         {{#if assignee}}
-                            <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}"/ alt="assigned to {{assignee.login}}"></a>
+                            <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}" alt="assigned to {{assignee.login}}"/></a>
                         {{else}}
                             <img src="{{../../../../staticDir}}/images/unassigned.png">
                         {{/if}}
