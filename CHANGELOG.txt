@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.0.5
+
+* sprinter version bump.
+
 ## 1.0.4
 
 * Updated async error handling to prevent erroneous error reporting of empty error arrays.
