@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.1
+
+* Fixed bug in percentage done on road map with 0 tasks are complete.
+
 ## 1.1.0
 
 * Road map integration with sprinter's new network issue formatting.
