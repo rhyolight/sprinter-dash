@@ -51,18 +51,21 @@ $(function() {
     }
 
     function refineData(detailLevel, data) {
-        // We start with the most detail, so if we want it all we leave it alone.
-        if (detailLevel == 2) {
-            return;
-        }
         _.each(data.milestones, function(milestone) {
             if (milestone.due_on) {
                 milestone.due_on = moment(milestone.due_on).format("MMM Do YYYY");
             }
-            _.each(milestone.superIssues, function(issue) {
+            // We start with the most detail, so if we want it all we leave it
+            // alone except for formatting the dates.
+            if (detailLevel == 2) {
+                return;
+            }
+            _.each(milestone.issues.supers, function(issue) {
                 if (detailLevel == 0) {
                     // Remove the entire body.
                     issue.html_body = '';
+                    // Remove the subtasks
+                    issue.subtasks = undefined;
                 } else if (detailLevel == 1) {
                     // Strip off the subtask list
                     issue.html_body = issue.html_body.split('<hr>')[0]
@@ -70,9 +73,9 @@ $(function() {
             });
             // Don't show stand-alone issues for low detail.
             if (detailLevel == 0) {
-                milestone.standAloneIssues = undefined;
+                milestone.issues.singletons = undefined;
             } else {
-                _.each(milestone.standAloneIssues, function(issue) {
+                _.each(milestone.issues.singletons, function(issue) {
                     issue.labels = _.filter(issue.labels, function(label) {
                         return label.name !== 'stand-alone';
                     });

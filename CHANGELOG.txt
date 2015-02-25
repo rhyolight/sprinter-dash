@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.1.0
+
+* Road map integration with sprinter's new network issue formatting.
+* Cut API calls almost in half.
+
 ## 1.0.5
 
 * sprinter version bump.

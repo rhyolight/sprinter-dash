@@ -48,7 +48,7 @@
 
             <table>
             <tbody>
-            {{#each superIssues}}
+            {{#each issues.supers}}
                 <tr class="issue {{state}}">
                     <td>
                     <h4>
@@ -79,6 +79,42 @@
                     {{{html_body}}}
                     </td>
                 </tr>
+                {{#if subtasks}}
+                <tr>
+                    <td colspan=""2"><h4>Sub Tasks:</h4></td>
+                </tr>
+                <tr class="stand-alone">
+                    <td colspan="2">
+                        <table>
+                            <tbody>
+                            {{#each subtasks}}
+                            <tr class="issue {{state}}">
+                                <td>
+                                    <a target="_blank" href="{{html_url}}">{{repo}}#{{number}}</a>
+                                </td>
+                                <td class="title">
+                                    <a target="_blank" href="{{html_url}}">{{title}}</a>
+                                </td>
+                                <td class="avatar">
+                                    {{#if assignee}}
+                                    <a href="{{assignee.html_url}}" target="_blank" title="assigned to {{assignee.login}}"><img src="{{assignee.avatar_url}}" alt="assigned to {{assignee.login}}"/></a>
+                                    {{else}}
+                                    <img src="{{../../../../../staticDir}}/images/unassigned.png">
+                                    {{/if}}
+                                </td>
+                                <td class="labels">
+                                    {{#each labels}}
+                                    <span style="background-color:#{{color}}">{{name}}</span>
+                                    {{/each}}
+                                </td>
+                            </tr>
+                            {{/each}}
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
+                {{/if}}
+
             {{/each}}
             </tbody>
             </table>
@@ -87,7 +123,7 @@
 
     </tr>
 
-    {{#if standAloneIssues}}
+    {{#if issues.singletons}}
     <tr>
         <td colspan="3">
             <h3>Remaining Stand-Alone {{title}} Issues</h3>
@@ -99,7 +135,7 @@
         <td colspan="3">
             <table>
             <tbody>
-            {{#each standAloneIssues}}
+            {{#each issues.singletons}}
                 <tr class="issue {{state}}">
                     <td>
                         <a href="{{html_url}}">{{repo}}#{{number}}</a>
