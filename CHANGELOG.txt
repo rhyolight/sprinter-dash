@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.1.3
+
+* Fixed a dumb CSS bug in roadmap.
+
 ## 1.1.2
 
 * Stripping off bountysource footers from issues.

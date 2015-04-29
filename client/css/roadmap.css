@@ -120,7 +120,7 @@ td.labels span {
 }
 .issue.closed h4,
 .issue.closed h4 a,
-.issue.closed h4 a:visited
+.issue.closed h4 a:visited,
 .issue.closed td a,
 .issue.closed td a:visited,
 .issue.closed td.title {
