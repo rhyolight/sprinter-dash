@@ -1,5 +1,6 @@
 var express = require('express'),
     dash = require('./lib/dash'),
+    buildStaticSite = require('./lib/smithy'),
     args = process.argv.slice(2),
     port = 8080,
     DEFAULT_REPOS = [
@@ -21,9 +22,12 @@ if (args.length) {
     console.warn(repos);
 }
 
+buildStaticSite();
+
 app = express();
 
 dash(app, urlPrefix, repos, function() {
+    app.use(express.static('build'));
     app.listen(port, function() {
         console.log(
             'sprinter.js dashboard server running on\n' +

@@ -16,7 +16,12 @@
   },
   "dependencies": {
     "cron": "^1.0.9",
+    "express": "^4.13.3",
+    "fs-extra": "^0.24.0",
+    "handlebars": "^4.0.2",
     "lodash": "^3.10.1",
+    "metalsmith": "1.7.0",
+    "metalsmith-layouts": "^1.4.0",
     "moment": "^2.10.6",
     "sprinter": "^1.1.7",
     "travis-foreman": "0.0.3"
